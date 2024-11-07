@@ -391,7 +391,7 @@ const config: Config = {
         appGreen:"#81c577"
       },
       borderColor:{
-        appGreen:"#81c577"
+        appGreen:"#81c577",
       }
     },
   },

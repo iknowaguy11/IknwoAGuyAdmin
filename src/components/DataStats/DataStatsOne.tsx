@@ -1,6 +1,7 @@
 import React from "react";
 import { dataStats } from "@/types/dataStats";
 import { userData } from "@/app/staticData/dummy";
+import { useFetchProjects, useFetchProvinces, useFetchUsers } from "@/_hooks/useFetch";
 
 const dataStatsList = [
   {
@@ -99,6 +100,9 @@ const dataStatsList = [
 ];
 
 const DataStatsOne: React.FC<dataStats> = () => {
+    const { ProvinceData} = useFetchProvinces(); 
+    const { ProjData} = useFetchProjects(); 
+    const {usrData}=useFetchUsers();
   return (
     <>
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-4 2xl:gap-7.5">
@@ -117,7 +121,9 @@ const DataStatsOne: React.FC<dataStats> = () => {
             <div className="mt-6 flex items-end justify-between">
               <div>
                 <h4 className="mb-1.5 text-heading-6 font-bold text-dark dark:text-white">
-                  {item.value}
+                  {index==0 ? ProvinceData?.length :
+                  index==1 ? ProjData?.length : usrData?.length
+                  }
                 </h4>
                 <span className="text-body-sm font-medium">{item.title}</span>
               </div>

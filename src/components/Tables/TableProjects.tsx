@@ -1,19 +1,21 @@
 "use client"
-import { ProjectActions, projectData } from "@/app/staticData/dummy";
+import { ProjectActions } from "@/app/staticData/dummy";
 import { useState } from "react";
 import DefaultSelectOption from "../SelectOption/DefaultSelectOption";
 import { Button } from "flowbite-react";
 import { customsubmitTheme } from "@/app/customTheme/appTheme";
+import { useFetchProjects } from "@/_hooks/useFetch";
 
 
 
 const TableProjects = () => {
+  const {ProjData}=useFetchProjects();
   const [currentPage, setCurrentPage] = useState(1);
   const [filter, setFilter] = useState("");
-  const itemsPerPage = 2; // Set your items per page
+  const itemsPerPage = 4; // Set your items per page
 
   // Filter and paginate data
-  const filteredData = projectData.filter((packageItem) =>
+  const filteredData = ProjData?.filter((packageItem:any) =>
     packageItem.task.toLowerCase().includes(filter.toLowerCase()) || 
   packageItem.owner.toLowerCase().includes(filter.toLowerCase())
   );
@@ -75,7 +77,7 @@ const TableProjects = () => {
                 </td>
                 <td className="border-[#eee] px-4 py-4 dark:border-dark-3">
                   <p className={`inline-flex rounded-full px-3.5 py-1 text-body-sm font-medium ${
-                      packageItem.Status === "open"
+                      packageItem.Status === "Active"
                         ? "bg-[#219653]/[0.08] text-[#219653]"
                         : "bg-[#D34053]/[0.08] text-[#D34053]"
                     }`}>

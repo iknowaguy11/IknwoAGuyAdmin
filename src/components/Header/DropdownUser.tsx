@@ -1,11 +1,19 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import ClickOutside from "@/components/ClickOutside";
+import { AppContext } from "@/Context/appContext";
+import { getAuth } from "firebase/auth";
+import { app } from "@/DB/firebaseConnection";
+import { useFetchAdmin } from "@/_hooks/useFetch";
+import { useRouter } from "next/navigation";
 
 const DropdownUser = () => {
+  const router = useRouter();
   const [dropdownOpen, setDropdownOpen] = useState(false);
-
+  const { isLoggedIn, setLoggedIn, ukey } = useContext(AppContext);
+  const { AdminData } = useFetchAdmin(ukey);
+  const auth = getAuth(app);
   return (
     <ClickOutside onClick={() => setDropdownOpen(false)} className="relative">
       <Link
@@ -72,16 +80,28 @@ const DropdownUser = () => {
 
             <span className="block">
               <span className="block font-medium text-dark dark:text-white">
-                Admininstrator
+                {AdminData[0]?.name}
               </span>
               <span className="block font-medium text-dark-5 dark:text-dark-6">
-                support@iknowaguy.co.za
+              {AdminData[0]?.email}
               </span>
             </span>
           </div>
           
           <div className="p-2.5">
-            <button className="flex w-full items-center gap-2.5 rounded-[7px] p-2.5 text-sm font-medium text-dark-4 duration-300 ease-in-out hover:bg-gray-2 hover:text-dark dark:text-dark-6 dark:hover:bg-dark-3 dark:hover:text-white lg:text-base">
+            <button
+            onClick={() => {
+              try {
+                auth.signOut();
+                window?.sessionStorage.setItem("ukey", "");
+                setLoggedIn(false);
+                window?.sessionStorage.clear();
+                router.replace("/login");
+              } catch (error:any) {
+                console.log(error);
+              }
+            }}
+             className="flex w-full items-center gap-2.5 rounded-[7px] p-2.5 text-sm font-medium text-dark-4 duration-300 ease-in-out hover:bg-gray-2 hover:text-dark dark:text-dark-6 dark:hover:bg-dark-3 dark:hover:text-white lg:text-base">
               <svg
                 className="fill-current"
                 width="18"

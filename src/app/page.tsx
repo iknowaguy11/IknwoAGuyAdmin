@@ -5,8 +5,8 @@ import React from "react";
 
 export const metadata: Metadata = {
   title:
-    "IKnow A Guy Dashboard | Find Trusted, Reliable Contractors For Your Home",
-  description: "This is Next.js Home page for NextAdmin Dashboard Kit",
+    "Iknow A Guy Dashboard | Find Trusted, Reliable Contractors For Your Home",
+  description: "Post a project and tell us what you need done. Receive up to 5 bids from home services professionals. Hire the person who best suits your needs and budget.",
 };
 
 export default function Home() {

@@ -1,21 +1,21 @@
 "use client"
 import { useState } from "react";
-import { Package } from "@/types/package";
-import { IUser } from "@/app/Interfaces/appInterfaces";
-import { UserActions, userData } from "@/app/staticData/dummy";
+import { UserActions } from "@/app/staticData/dummy";
 import DefaultSelectOption from "../SelectOption/DefaultSelectOption";
 import { Button } from "flowbite-react";
 import { customsubmitTheme } from "@/app/customTheme/appTheme";
+import { useFetchUsers } from "@/_hooks/useFetch";
 
 
 
 const TableProjects = () => {
+  const {usrData}=useFetchUsers();
   const [currentPage, setCurrentPage] = useState(1);
   const [filter, setFilter] = useState("");
-  const itemsPerPage = 2; // Set your items per page
+  const itemsPerPage = 4; // Set your items per page
 
   // Filter and paginate data
-  const filteredData = userData.filter((packageItem) =>
+  const filteredData = usrData.filter((packageItem) =>
     packageItem.YourName.toLowerCase().includes(filter.toLowerCase()) ||
   packageItem.companyEmail.toLowerCase().includes(filter.toLowerCase()) || 
   packageItem.RegistrationNo.toLowerCase().includes(filter.toLowerCase())
@@ -71,13 +71,13 @@ const TableProjects = () => {
                   <h5 className="text-dark dark:text-white">{packageItem.YourName}</h5>
                 </td>
                 <td className="border-[#eee] px-4 py-4 dark:border-dark-3 xl:pl-7.5">
-                  <h5 className="text-dark dark:text-white">{packageItem.RegistrationNo}</h5>
+                  <h5 className="text-dark dark:text-white">{packageItem.RegistrationNo=="" ? "N/A" : packageItem.RegistrationNo}</h5>
                 </td>
                 <td className="border-[#eee] px-4 py-4 dark:border-dark-3 xl:pl-7.5">
-                  <h5 className="text-dark dark:text-white">{packageItem.companyName}</h5>
+                  <h5 className="text-dark dark:text-white">{packageItem.membership + (packageItem.companyName=="" && packageItem.membership=="contractor" ? " Skilled Individual" : "")}</h5>
                 </td>
                 <td className="border-[#eee] px-4 py-4 dark:border-dark-3">
-                  <p className="text-dark dark:text-white">{packageItem.isactive}</p>
+                  <p className="text-dark dark:text-white">{packageItem.companyName=="" ? "N/A" : packageItem.companyName}</p>
                 </td>
                 <td className="border-[#eee] px-4 py-4 dark:border-dark-3">
                   <p className={`inline-flex rounded-full px-3.5 py-1 text-body-sm font-medium ${packageItem.isactive === "yes"
