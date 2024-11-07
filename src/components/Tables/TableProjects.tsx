@@ -70,7 +70,7 @@ const TableProjects = () => {
                   
                 </td>
                 <td className="border-[#eee] px-4 py-4 dark:border-dark-3">
-                  <p className="text-dark dark:text-white">{packageItem.budget}</p>
+                  <p className="text-dark dark:text-white">{"R"+packageItem.budget}</p>
                 </td>
                 <td className="border-[#eee] px-4 py-4 dark:border-dark-3">
                   <p className="text-dark dark:text-white">{packageItem.postTime}</p>
