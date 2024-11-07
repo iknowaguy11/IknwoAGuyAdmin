@@ -52,6 +52,7 @@ const TableProjects = () => {
           <thead>
             <tr className="bg-[#F7F9FC] text-left dark:bg-dark-2">
               <th className="min-w-[160px] px-4 py-4 font-medium text-dark dark:text-white xl:pl-7.5">#</th>
+              <th className="min-w-[160px] px-4 py-4 font-medium text-dark dark:text-white">Owner</th>
               <th className="min-w-[160px] px-4 py-4 font-medium text-dark dark:text-white">Task</th>
               <th className="min-w-[120px] px-4 py-4 font-medium text-dark dark:text-white">Budget</th>
               <th className="min-w-[120px] px-4 py-4 font-medium text-dark dark:text-white">Date Posted</th>
@@ -64,6 +65,10 @@ const TableProjects = () => {
               <tr key={index}>
                 <td className="border-[#eee] px-4 py-4 dark:border-dark-3 xl:pl-7.5">
                   {(currentPage - 1) * itemsPerPage + index + 1}
+                </td>
+                <td className="border-[#eee] px-4 py-4 dark:border-dark-3 xl:pl-7.5">
+                  <h5 className="text-dark dark:text-white">{packageItem.owner}</h5>
+                  
                 </td>
                 <td className="border-[#eee] px-4 py-4 dark:border-dark-3 xl:pl-7.5">
                   <h5 className="text-dark dark:text-white">{packageItem.task}</h5>
