@@ -1,23 +1,35 @@
-import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
-import { Metadata } from "next";
-import DefaultLayout from "@/components/Layouts/DefaultLaout";
-import ProfileBox from "@/components/ProfileBox";
+'use client';
 
-export const metadata: Metadata = {
-  title: "Next.js Profile Page | NextAdmin - Next.js Dashboard Kit",
-  description: "This is Next.js Profile page for NextAdmin Dashboard Kit",
-};
+import { useContext, useEffect } from "react";
+
+import { useRouter } from "next/navigation";
+import { AppContext } from "@/Context/appContext";
+import { useFetchUserAccount } from "@/_hooks/useFetch";
+import ContractorProfile from "@/components/ContractorProfile";
+import HomeOwnerProfile from "@/components/HomeOwnerProfile";
+import DefaultLayout from "@/components/Layouts/DefaultLaout";
 
 const Profile = () => {
-  return (
-    <DefaultLayout>
-      <div className="mx-auto w-full max-w-[970px]">
-        <Breadcrumb pageName="Profile" />
 
-        <ProfileBox />
-      </div>
-    </DefaultLayout>
-  );
-};
+    const { clientKey } = useContext(AppContext);
+    const { UserData, accountError, isGettingAccount } = useFetchUserAccount(clientKey);
+    const router = useRouter();
+    //useeffect
+    return (
+        <>
+            {
+                isGettingAccount ? <p>Loading profile data</p> :
+                    <DefaultLayout>
+
+                        <div className={UserData[0]?.membership == "contractor" ? "w-full h-full mt-16 mb-8 grid lg:grid-cols-2 xl:lg:grid-cols-2 md:lg:grid-cols-2 sm:lg:grid-cols-1 items-center justify-items-center justify-center" : "w-full h-full mt-16 mb-8 flex items-center justify-items-center justify-center"}>
+                            {
+                                UserData[0]?.membership == "contractor" ? <ContractorProfile UserData={UserData} /> : UserData[0]?.membership == "homeowner" ? <HomeOwnerProfile UserData={UserData} /> : null
+                            }
+                        </div>
+                    </DefaultLayout>
+            }
+        </>
+    );
+}
 
 export default Profile;

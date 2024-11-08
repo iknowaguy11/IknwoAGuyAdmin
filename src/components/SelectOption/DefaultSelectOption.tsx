@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React, { Dispatch, SetStateAction, useState } from "react";
 import ClickOutside from "@/components/ClickOutside";
 import { Select } from "flowbite-react";
 import { customselectTheme } from "@/app/customTheme/appTheme";
 
-const DefaultSelectOption = ({ options }: any) => {
-  const [selectedOption, setSelectedOption] = useState(options[0]);
+const DefaultSelectOption = ({ options,setSelectedOption }: {setSelectedOption:Dispatch<SetStateAction<string>>,options:any}) => {
+  
   const [isOpen, setIsOpen] = useState(false);
 
   const handleOptionSelect = (option: string) => {

@@ -6,6 +6,10 @@ interface AppContextType{
     setLoggedIn: Dispatch<SetStateAction<boolean>>;
     ukey:string|null,
     SetUkey:Dispatch<SetStateAction<string | null>>;
+
+    //current user selected
+    clientKey:string|null,
+    SetClientKey:Dispatch<SetStateAction<string | null>>;
 }
 
 const AppContext = createContext<AppContextType>({
@@ -13,10 +17,13 @@ const AppContext = createContext<AppContextType>({
     setLoggedIn: (): boolean => false,
     ukey:null,
     SetUkey: (): null => null,
+    clientKey:null,
+    SetClientKey: (): null => null,
 });
 
 const AppProvider = ({ children }: { children: any }) => {
     const [ukey,SetUkey]=useState<string | null>(null);
+    const [clientKey,SetClientKey]=useState<string | null>(null);
     const [isLoggedIn, setLoggedIn] = useState<boolean>(false);
     useEffect(()=>{
         SetUkey(window?.sessionStorage?.getItem("ukey")!==undefined && window?.sessionStorage?.getItem("ukey")!==null && window?.sessionStorage?.getItem("ukey")!=="" ? window?.sessionStorage?.getItem("ukey") :null);
@@ -25,6 +32,7 @@ const AppProvider = ({ children }: { children: any }) => {
     return (
         <AppContext.Provider value={{
             ukey,SetUkey,
+            clientKey,SetClientKey,
             isLoggedIn, setLoggedIn
         }}>
         {children}

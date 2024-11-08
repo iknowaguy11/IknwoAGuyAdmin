@@ -9,6 +9,7 @@ import { useFetchProjects } from "@/_hooks/useFetch";
 
 
 const TableProjects = () => {
+  const [selectedOption, setSelectedOption] = useState(ProjectActions[0]);
   const {ProjData}=useFetchProjects();
   const [currentPage, setCurrentPage] = useState(1);
   const [filter, setFilter] = useState("");
@@ -93,7 +94,7 @@ const TableProjects = () => {
                 <td className="border-[#eee] px-4 py-4 dark:border-dark-3 xl:pr-7.5 text-right">
                 <td className="border-[#eee] px-4 py-4 dark:border-dark-3 xl:pr-7.5 text-right">
                   {/* Actions buttons here */}
-                  <DefaultSelectOption options={ProjectActions}/>
+                  <DefaultSelectOption options={ProjectActions} setSelectedOption={setSelectedOption}/>
                   <Button size="xs" className="bg-appGreen mt-1" theme={customsubmitTheme} type="submit" color="appsuccess">submit</Button>
                 </td>
                 </td>

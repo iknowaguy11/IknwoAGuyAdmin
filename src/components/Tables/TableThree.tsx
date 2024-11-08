@@ -1,14 +1,20 @@
 "use client"
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { UserActions } from "@/app/staticData/dummy";
 import DefaultSelectOption from "../SelectOption/DefaultSelectOption";
 import { Button } from "flowbite-react";
 import { customsubmitTheme } from "@/app/customTheme/appTheme";
 import { useFetchUsers } from "@/_hooks/useFetch";
+import { updatePermission, updateProfile } from "@/app/Controllers/UpdateProfile";
+import { AppContext } from "@/Context/appContext";
+import { useRouter } from "next/navigation";
 
 
 
 const TableProjects = () => {
+  const router=useRouter();
+  const {SetClientKey}=useContext(AppContext);
+  const [selectedOption, setSelectedOption] = useState(UserActions[0]);
   const {usrData}=useFetchUsers();
   const [currentPage, setCurrentPage] = useState(1);
   const [filter, setFilter] = useState("");
@@ -35,6 +41,18 @@ const TableProjects = () => {
     setFilter(event.target.value);
     setCurrentPage(1); // Reset to the first page on filter change
   };
+
+  const HandleActions=(id:string,currntperm:string)=>{
+    if(selectedOption==='---') return;
+    if(selectedOption=="revoke"){
+      updatePermission(id,{isactive:currntperm=="no" ? "yes":"no"});
+    }else if(selectedOption=="delete"){
+
+    }else if(selectedOption=="profile"){
+      SetClientKey(id);
+      router.push('/profile');
+    }
+  }
 
   return (
     <div className="rounded-[10px] border border-stroke bg-white p-4 shadow-1 dark:border-dark-3 dark:bg-gray-dark dark:shadow-card sm:p-7.5 mb-3">
@@ -90,8 +108,8 @@ const TableProjects = () => {
                 </td>
                 <td className="border-[#eee] px-4 py-4 dark:border-dark-3 xl:pr-7.5 text-right">
                   {/* Actions buttons here */}
-                  <DefaultSelectOption options={UserActions}/>
-                  <Button size="xs" className="bg-appGreen mt-1" theme={customsubmitTheme} type="submit" color="appsuccess">submit</Button>
+                  <DefaultSelectOption options={UserActions} setSelectedOption={setSelectedOption}/>
+                  <Button onClick={()=>HandleActions(packageItem.Id,packageItem.isactive)} size="xs" className="bg-appGreen mt-1" theme={customsubmitTheme} type="submit" color="appsuccess">submit</Button>
                 </td>
               </tr>
             ))}

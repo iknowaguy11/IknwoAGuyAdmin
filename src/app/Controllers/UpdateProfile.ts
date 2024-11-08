@@ -50,4 +50,12 @@ export const updateProfile = async (e: FormEvent<HTMLFormElement>, router: any, 
     }
 
 }
+export const updatePermission=(_id:string,updateData:any)=>{
+    setDoc(doc(db, 'Users', _id.trim()), updateData, { merge: true }).then(() => {
+        successMessage("Updated permisions");
+        window?.location?.reload();
+    }).catch((error: any) => {
+        failureMessage("Error: " + error?.message);
+    });
+}
 
