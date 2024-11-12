@@ -1,33 +1,28 @@
-
 "use client";
+
+import { isGrantedAccess } from "@/app/Controllers/isAdminAllowed";
+import { customInputBoxTheme, customsubmitTheme, NetworkMessage, NetworkTitle } from "@/app/customTheme/appTheme";
+import { failureMessage, successMessage } from "@/app/notifications/successError";
+import { AppContext } from "@/Context/appContext";
+import { app } from "@/DB/firebaseConnection";
+import { QuotaExceededError } from "@/Interfaces/appInterfaces";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { Dispatch, FormEvent, useContext, useState } from "react";
+import validator from "validator";
 import { Offline, Online } from "react-detect-offline";
 import { Alert, Button, FooterDivider, Label, TextInput } from "flowbite-react";
 import Link from "next/link";
-import { NetworkMessage, NetworkTitle, customInputBoxTheme, customsubmitTheme } from "../customTheme/appTheme";
-import { HiMail } from "react-icons/hi";
-import { FormEvent, useContext, useEffect, useState } from "react";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
-import { app } from "../DB/firebaseConnection";
-import { useRouter } from "next/navigation";
-import { HiInformationCircle } from 'react-icons/hi';
-import { failureMessage, successMessage } from "../notifications/successError";
-import { AppContext } from "../../Context/appContext";
-import { QuotaExceededError } from "../../Interfaces/appInterfaces";
-import { isGrantedAccess } from "../Controllers/isAdminAllowed";
-import validator from 'validator';
+import { HiMail,HiInformationCircle } from "react-icons/hi";
+import Image from "next/image";
+import applogo from '../../public/images/logo/logoinknow.png';
 
 export default function Login() {
-    const { setLoggedIn } = useContext(AppContext);
+    const { setLoggedIn,setIsAuthenticated  } = useContext(AppContext);
     const [username, SetUserName] = useState("");
     const [password, setPassword] = useState("");
     const [loading, setloading] = useState(false);
-    const router = useRouter();
 
-    useEffect(()=>{
-        if (window?.sessionStorage?.getItem("ukey") !== undefined && window?.sessionStorage?.getItem("ukey") !== null && window?.sessionStorage?.getItem("ukey") !== "") {
-            router.replace('/');
-        }
-    },[router]);
+    
     const AttemptLogin = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         if (username !== "" && password !== "") {
@@ -45,10 +40,11 @@ export default function Login() {
                             window.sessionStorage.setItem("ukey", resp?.user?.uid?.trim());
                             successMessage("Succesful login in...");
                             setLoggedIn(true);
-                            router.replace("/");
+                            setIsAuthenticated(true);
                         }else{
                             failureMessage("Your account is suspended or still under admin review.\n Contact Adminstrator for more details");
                             setLoggedIn(false);
+                            setIsAuthenticated(false);
                             auth.signOut();
                         }
                         
@@ -71,7 +67,11 @@ export default function Login() {
     return (
         <div className="w-full h-full mt-20 mb-8 flex items-center justify-center">
             <div>
-                <form onSubmit={(e) => AttemptLogin(e)} className="flex max-w-md flex-col gap-4 w-screen flex-grow border p-7 rounded-md shadow-md">
+                <form onSubmit={(e) => AttemptLogin(e)} className="flex bg-white max-w-md flex-col gap-4 w-screen flex-grow border p-7 rounded-md shadow-md">
+                    <Image
+                    src={applogo}
+                    className="w-60 h-12"
+                    alt="...."/>
                     <h2 className="text-lg">Log Into Your Account</h2>
                     <div>
                         <div className="mb-2 block">

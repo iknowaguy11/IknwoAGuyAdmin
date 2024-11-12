@@ -11,7 +11,7 @@ import { useRouter } from "next/navigation";
 const DropdownUser = () => {
   const router = useRouter();
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const { isLoggedIn, setLoggedIn, ukey } = useContext(AppContext);
+  const { isLoggedIn, setLoggedIn, ukey,setIsAuthenticated } = useContext(AppContext);
   const { AdminData } = useFetchAdmin(ukey);
   const auth = getAuth(app);
   return (
@@ -95,8 +95,9 @@ const DropdownUser = () => {
                 auth.signOut();
                 window?.sessionStorage.setItem("ukey", "");
                 setLoggedIn(false);
+                setIsAuthenticated(false);
                 window?.sessionStorage.clear();
-                router.replace("/login");
+                window.location.href='/';
               } catch (error:any) {
                 console.log(error);
               }

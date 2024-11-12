@@ -1,20 +1,29 @@
-import ECommerce from "@/components/Dashboard/E-commerce";
-import { Metadata } from "next";
-import DefaultLayout from "@/components/Layouts/DefaultLaout";
-import React from "react";
+"use client"
 
-export const metadata: Metadata = {
-  title:
-    "I Know A Guy - Dashboard | Find Trusted, Reliable Contractors For Your Home",
-  description: "Post a project and tell us what you need done. Receive up to 5 bids from home services professionals. Hire the person who best suits your needs and budget.",
-};
+import React, { useContext, useEffect, useState } from "react";
+import ECommerce from "@/components/Dashboard/E-commerce";
+import DefaultLayout from "@/components/Layouts/DefaultLaout";
+import { Metadata } from "next";
+import Login from "@/components/Login";
+import { AppContext } from "@/Context/appContext";
+
 
 export default function Home() {
+  const { isAuthenticated, setIsAuthenticated } = useContext(AppContext);
+  useEffect(() => {
+    const ukey = window?.sessionStorage?.getItem("ukey");
+    setIsAuthenticated(!!ukey);
+  }, []);
+
   return (
     <>
-      <DefaultLayout>
-        <ECommerce />
-      </DefaultLayout>
+      {isAuthenticated ? (
+        <DefaultLayout>
+          <ECommerce />
+        </DefaultLayout>
+      ) : (
+        <Login />
+      )}
     </>
   );
 }

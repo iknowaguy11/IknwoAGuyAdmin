@@ -1,12 +1,11 @@
 "use client"
+
 import { ProjectActions } from "@/app/staticData/dummy";
 import { useState } from "react";
 import DefaultSelectOption from "../SelectOption/DefaultSelectOption";
 import { Button } from "flowbite-react";
 import { customsubmitTheme } from "@/app/customTheme/appTheme";
 import { useFetchProjects } from "@/_hooks/useFetch";
-
-
 
 const TableProjects = () => {
   const [selectedOption, setSelectedOption] = useState(ProjectActions[0]);

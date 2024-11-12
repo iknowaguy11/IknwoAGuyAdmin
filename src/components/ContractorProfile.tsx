@@ -3,16 +3,15 @@ import { useFetchBidCredits, useFetchProvinces, useFetchServices, useFetchgetCon
 import { useCallback, useEffect, useRef, useState } from "react";
 
 import iknown from '../../public/images/logo/logoinknow.png';
-import certificatePng from '../../public/images/logo/logoinknow.png';
+import certificatePng from '../../public/images/logo/certificate.png';
 import Image from "next/image";
 import Link from "next/link";
-import { HiTrash, HiShoppingCart } from 'react-icons/hi';
 import { IActualTasks, ITowns, IUser } from "../Interfaces/appInterfaces";
 import { useRouter } from "next/navigation";
 
 import Select_API from 'react-select';
 import validator from 'validator';
-import { HiPhone, HiHome, HiBriefcase, HiMail, HiShare } from 'react-icons/hi';
+import { HiPhone, HiHome, HiBriefcase, HiTrash, HiShare } from 'react-icons/hi';
 import { updateProfile } from "@/app/Controllers/UpdateProfile";
 import { customInputBoxTheme, customsubmitTheme, customTheme } from "@/app/customTheme/appTheme";
 import MyBids from "./MyBids";
@@ -33,10 +32,15 @@ const ContractorProfile = ({ UserData }: { UserData: IUser[] }) => {
     const [isProcessing, SetIsprocessing] = useState<boolean>(false);
     const [selectedServices, SetSelectedServices] = useState<string[]>([]);
     const [HistoryServices, setHistoryServices] = useState<string[]>([]);
+    const [HistoryAdress, setHistoryAdress] = useState<string[]>([]);
 
     const RemoveOldServices = (value: string) => {
         const updatedServices = HistoryServices.filter((item) => item !== value);
         setHistoryServices(updatedServices);
+    }
+    const RemoveOldAddress = (value: string) => {
+        const updatedAddress = HistoryAdress.filter((item) => item !== value);
+        setHistoryAdress(updatedAddress);
     }
     const RemoveServices = (value: string) => {
         const updatedServices = selectedServices.filter((item) => item !== value);
@@ -59,6 +63,14 @@ const ContractorProfile = ({ UserData }: { UserData: IUser[] }) => {
 
     useEffect(() => {
         setHistoryServices(UserData[0]?.Services);
+    }, []);
+    useEffect(() => {
+        if(Array.isArray(UserData[0]?.Address)){
+            setHistoryAdress(UserData[0]?.Address);
+        }else{
+            setHistoryAdress([UserData[0]?.Address]);
+        }
+        
     }, []);
 
 
@@ -99,6 +111,7 @@ const ContractorProfile = ({ UserData }: { UserData: IUser[] }) => {
     const [subareas, SetSubareas] = useState<ITowns[]>([]);
     const [provCategory, setprovCategory] = useState<string | null | undefined>("Select Provice");
     const [ServiceCategory, setServiceCategory] = useState<string | null | undefined>("Select Service");
+    const [selectedAddress, SetSelectedAddress] = useState<string[]>([]);//adress
 
     const Services = [
         { value: "PLUMBING", label: "PLUMBING" },
@@ -137,6 +150,17 @@ const ContractorProfile = ({ UserData }: { UserData: IUser[] }) => {
         }
     }
 
+    const AppendSelectedAddress = useCallback((value: string) => {
+        if (!selectedAddress.includes(value) && selectedAddress.length < 15) {
+            SetSelectedAddress((prev) => [...prev, value]);
+        }
+    }, [selectedAddress]);
+
+    const RemoveAddress = (value: string) => {
+        SetSelectedAddress((prev) => prev.filter((item) => item !== value));
+    };
+
+
     //dead code... ignore
     const SetProvince = (category: string | null | undefined) => {
         setprovCategory(category);
@@ -156,7 +180,7 @@ const ContractorProfile = ({ UserData }: { UserData: IUser[] }) => {
         <>
             <div className="h-full items-center justify-items-center">
                 <Card className='flex max-w-lg flex-grow rounded mt-3'>
-                    <form onSubmit={(e) => updateProfile(e, router, { Address: (Selectedsubarea == "Select A Sub Area" || Selectedsubarea == "" ? UserData[0]?.Address : Selectedsubarea), phone: (validator.isMobilePhone(phone?.trim()) ? phone : UserData[0]?.phone), AdvertisingMsg: Bio, Services: [...new Set([...selectedServices, ...HistoryServices])] }, UserData[0]?.Id, Imageupload, SetIsprocessing)} className="flex max-w-lg flex-col gap-4 flex-grow">
+                    <form onSubmit={(e) => updateProfile(e, router, { companyName: companyName, Address:[...new Set([...selectedAddress, ...HistoryAdress])], phone: (validator.isMobilePhone(phone?.trim()) ? phone : UserData[0]?.phone), AdvertisingMsg: Bio, Services: [...new Set([...selectedServices, ...HistoryServices])] }, UserData[0]?.Id, Imageupload, SetIsprocessing)} className="flex max-w-lg flex-col gap-4 flex-grow">
                         <div className="mb-2 block">
                             {
                                 UserData[0]?.profileImage &&
@@ -192,7 +216,8 @@ const ContractorProfile = ({ UserData }: { UserData: IUser[] }) => {
 
                             </div>
                         </div>
-                        <p className="text-xs text-gray-500">{UserData[0]?.companyEmail}</p>
+                        <p className="text-sm text-gray-200">{UserData[0]?.companyEmail}</p>
+                        <p>{(UserData[0].formSubmitted)}</p>
                         <Button onClick={() => router?.push('profile/' + UserData[0]?.Id)}
                             size="xs"
                             type="button"
@@ -201,14 +226,20 @@ const ContractorProfile = ({ UserData }: { UserData: IUser[] }) => {
                             Ratings & Reviews
                         </Button>
                         <div>
-                            <div className="mb-2 block">
-                                <Label htmlFor="contemail" value="Company Name *" />
-                                <p className="text-xs text-gray-500">{companyName || UserData[0]?.companyName}</p>
-                            </div>
-                            <Tooltip content="Admin Attention is Requires" style="dark">
-                                <TextInput theme={customInputBoxTheme} color={"focuscolor"} id="contemail" type="text" readOnly value={companyName || UserData[0]?.companyName} disabled placeholder="Company Name" required shadow />
 
-                            </Tooltip>
+
+                            {companyName || UserData[0]?.formSubmitted !== "Skilled Individual" ?
+                                <>
+                                    <div className="mb-2 block">
+                                        <Label htmlFor="contemail" value="Company Name *" />
+                                        <p className="text-xs text-gray-500">{companyName || UserData[0]?.companyName}</p>
+                                    </div>
+                                    <TextInput theme={customInputBoxTheme} color={"focuscolor"} id="contemail" type="text" value={companyName} onChange={(e) => setcompanyName(e?.target.value)} placeholder="Company Name" required shadow />
+
+                                </>
+
+                                : null}
+
                         </div>
 
                         <div>
@@ -224,24 +255,57 @@ const ContractorProfile = ({ UserData }: { UserData: IUser[] }) => {
                                 <Label htmlFor="Town" value="Address *" />
                                 <p className="text-xs text-gray-500">Home owners use this Address to search for you</p>
                             </div>
+                            <div>
+                                <div className="mb-2 block">
+                                    <Label htmlFor="Town" value="Compay's Address *" />
+                                    <span className="text-xs text-gray-600 font-light text-wrap"> Limit : 15</span>
+                                </div>
+                                <Select_API placeholder={"Select Provice"} options={provinces} onChange={(e) => SetProvince(e?.value)} />
+
+                                {
+                                    subareas.length > 0 &&
+
+                                    <Select
+                                        className="max-w-lg rounded mt-1 mb-1"
+                                        onChange={(e) => e?.target.value !== "Select A Sub Area" ? AppendSelectedAddress(e?.target.value) : null}
+                                    >
+                                        <option>Select A Sub Area</option>
+                                        {subareas?.map((item) => (
+                                            <option key={item.area} value={item.area}>{item.area}</option>
+                                        ))}
+                                    </Select>
+                                }
+                                <div className="grid grid-cols-3 gap-1 pt-2">
+                                    {selectedAddress.map((address, index) => (
+                                        <div key={index} className="flex flex-wrap gap-2">
+                                            <Badge onClick={() => RemoveAddress(address)} className="w-fit hover:cursor-pointer bg-appGreen text-white" icon={HiTrash} color="success">
+                                                {address}
+                                            </Badge>
+                                        </div>
+                                    ))}
+                                </div>
+
+                            </div>
                             {
-                                Array.isArray(UserData[0]?.Address) ?
+                                Array.isArray(HistoryAdress) ?
                                     <>
                                         <ul>
                                             {
-                                                UserData[0]?.Address?.map((adr, index) => (
+                                                HistoryAdress.map((adr, index) => (
                                                     <div key={index} className='flex mb-1 mt-1'>
-                                                        <Badge theme={customTheme} color={"success"} icon={HiHome}></Badge>
+                                                       <HiTrash onClick={()=>RemoveOldAddress(adr.trim())} className="h-6 w-6 hover:cursor-pointer"/>
+                                                         <Badge
+                                                         theme={customTheme} color={"success"} icon={HiHome}></Badge>
                                                         <li className='text-sm'> {adr}</li>
                                                     </div>
                                                 ))
                                             } </ul>
                                     </> :
                                     <div className='flex mb-1 mt-1 w-fit'>
-                                        <Badge className="hover:cursor-not-allowed" theme={customTheme} color={"success"} icon={HiHome}></Badge>
-                                        <p className='text-sm'> {UserData[0]?.Address}</p>
+                                        <HiTrash onClick={()=>RemoveOldAddress(HistoryAdress)} className="h-6 w-6 hover:cursor-pointer"/>
+                                        <Badge theme={customTheme} color={"success"} icon={HiHome}></Badge>
+                                        <p className='text-sm'> {HistoryAdress}</p>
                                     </div>
-
                             }
                         </div>
 
@@ -261,8 +325,8 @@ const ContractorProfile = ({ UserData }: { UserData: IUser[] }) => {
                                     <Image
                                         alt="certificate pdf"
                                         src={certificatePng}
-                                        width={25}
-                                        height={25}
+                                        width={35}
+                                        height={35}
                                     />
                                 </Link>
                             }
@@ -307,6 +371,7 @@ const ContractorProfile = ({ UserData }: { UserData: IUser[] }) => {
                                 </div>
                             ))}
                         </div>
+
                         <Button isProcessing={isProcessing} theme={customsubmitTheme} type="submit" color="appsuccess">Update</Button>
                     </form>
                 </Card>

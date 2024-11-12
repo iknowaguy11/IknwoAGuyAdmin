@@ -11,10 +11,22 @@ import DefaultLayout from "@/components/Layouts/DefaultLaout";
 
 const Profile = () => {
 
-    const { clientKey } = useContext(AppContext);
+    const { clientKey,isAuthenticated } = useContext(AppContext);
     const { UserData, accountError, isGettingAccount } = useFetchUserAccount(clientKey);
     const router = useRouter();
-    //useeffect
+    useEffect(()=>{
+        if(isAuthenticated==false || clientKey=="" || clientKey==null){
+            window.location.replace('/');
+        }
+    })
+    useEffect(() => {
+        if (window?.sessionStorage?.getItem("ukey") == undefined || window?.sessionStorage?.getItem("ukey") == null || window?.sessionStorage?.getItem("ukey") == "") {
+            //router.replace('/');
+            window.location.replace('/');
+            
+        }
+
+    }, [router]);
     return (
         <>
             {

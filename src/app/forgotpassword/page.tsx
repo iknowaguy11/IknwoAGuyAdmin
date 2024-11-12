@@ -10,6 +10,8 @@ import { sendPasswordResetEmail, getAuth } from "firebase/auth";
 import { failureMessage, successMessage } from "../notifications/successError";
 import { app } from "../DB/firebaseConnection";
 import validator from 'validator';
+import Image from "next/image";
+import applogo from '../../../public/images/logo/logoinknow.png';
 
 export default function ForgotPassword() {
 
@@ -36,7 +38,11 @@ export default function ForgotPassword() {
     return (
         <div className="w-full h-full mt-20 mb-8 flex items-center justify-center">
             <div>
-                <form className="flex max-w-md flex-col gap-4 w-screen flex-grow border p-7 rounded-md shadow-md">
+                <form className="flex bg-white max-w-md flex-col gap-4 w-screen flex-grow border p-7 rounded-md shadow-md">
+                <Image
+                    src={applogo}
+                    className="w-60 h-12"
+                    alt="...."/> 
                     <h2 className="text-lg font-bold">Send Password Reset</h2>
                     <p className="text-gray-600 font-light">Enter your email address below. We`ll look for your account and send you a password reset email.</p>
                     <div>
@@ -53,7 +59,7 @@ export default function ForgotPassword() {
                         </Alert></Offline>
                     <FooterDivider></FooterDivider>
                     <div className="flex justify-end gap-2">
-                        <p>Already have an account?</p> <Link className="text-appGreen" href={"/login"}> Login</Link>
+                        <p>Already have an account?</p> <Link className="text-appGreen" href={"/"}> Login</Link>
                     </div>
                 </form>
             </div>

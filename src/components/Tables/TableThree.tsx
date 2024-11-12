@@ -8,8 +8,8 @@ import { useFetchUsers } from "@/_hooks/useFetch";
 import { updatePermission, updateProfile } from "@/app/Controllers/UpdateProfile";
 import { AppContext } from "@/Context/appContext";
 import { useRouter } from "next/navigation";
-
-
+import axios from "axios";
+import { failureMessage, successMessage } from "@/app/notifications/successError";
 
 const TableProjects = () => {
   const router=useRouter();
@@ -47,17 +47,34 @@ const TableProjects = () => {
     if(selectedOption=="revoke"){
       updatePermission(id,{isactive:currntperm=="no" ? "yes":"no"});
     }else if(selectedOption=="delete"){
-
+      DeleteUser(id.trim());
     }else if(selectedOption=="profile"){
       SetClientKey(id);
       router.push('/profile');
     }
   }
 
+  const DeleteUser=(uid:string)=>{
+    axios.delete('https://payfastpaymentvalidator.onrender.com/deleteUser',{data:{uid},headers:{
+      'Content-Type': 'application/json'
+    }}).then(resp=>{
+      if (resp.status === 200) {
+        successMessage('User deleted successfully');
+        console.log(resp.data.message);
+      } else {
+        console.error('Failed to delete user:', resp.data.error);
+        failureMessage('Failed to delete user:'+ resp.data.error);
+      }
+    }).catch((err:any)=>{
+      failureMessage(String(err.message))
+    })
+  }
+
   return (
     <div className="rounded-[10px] border border-stroke bg-white p-4 shadow-1 dark:border-dark-3 dark:bg-gray-dark dark:shadow-card sm:p-7.5 mb-3">
       <div className="px-4 py-6 md:px-6 xl:px-9 flex justify-between items-center">
         <h4 className="text-body-2xlg font-bold text-dark dark:text-white">Users</h4>
+        <div className="gap-2 flex">
         <input
           type="text"
           placeholder="Filter by name/reg/email"
@@ -65,6 +82,9 @@ const TableProjects = () => {
           onChange={handleFilterChange}
           className="border border-stroke p-2 rounded dark:bg-dark-3 dark:text-white"
         />
+           <Button theme={customsubmitTheme} type="submit" color="appsuccess">Add</Button>
+        </div>
+                    
       </div>
       <div className="max-w-full overflow-x-auto">
         <table className="w-full table-auto">

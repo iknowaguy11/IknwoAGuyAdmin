@@ -102,6 +102,14 @@ const HomeOwnerProfile = ({UserData}:{UserData:IUser[]}) => {
                                 
                             </div>
                         </div>
+                        <Image
+                                src={UserData[0]?.profileImage}
+                                alt="Picture of the author"
+                                className="mr-3"
+                                width={40}
+                                height={40}
+                                priority
+                            />
                         <p className="text-xs text-gray-500">{UserData[0]?.companyEmail}</p>
 
                         <div>
@@ -131,7 +139,7 @@ const HomeOwnerProfile = ({UserData}:{UserData:IUser[]}) => {
             </div>
                     <form className="flex max-w-lg flex-col gap-4 flex-grow">
                         
-                        <h3 className="text-lg font-bold underline">My Projects</h3><Badge onClick={()=>router.push("postproject")} theme={customTheme} color={"success"} className="w-fit bg-appGreen hover:cursor-pointer" icon={HiPlusCircle}>Add a Project</Badge>
+                        <h3 className="text-lg font-bold underline">Homeowner's Projects</h3>
                         
                         {
                             UserProjects?.map((item) => (

@@ -15,7 +15,9 @@ const ECommerce: React.FC = () => {
   const router = useRouter();
     useEffect(() => {
         if (window?.sessionStorage?.getItem("ukey") == undefined || window?.sessionStorage?.getItem("ukey") == null || window?.sessionStorage?.getItem("ukey") == "") {
-            router.replace('login');
+            router.replace('/login');
+            window.location.href='/login';
+            
         }
 
     }, [router]);

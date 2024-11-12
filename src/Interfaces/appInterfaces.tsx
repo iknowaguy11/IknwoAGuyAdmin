@@ -118,7 +118,7 @@ export interface IUser {
     companyName: string,
     companyEmail: string,
     phone: string,
-    Address: string[],
+    Address: string[] | string,
     profileImage: string,
     certificate: string,
     imgfilename: string,
