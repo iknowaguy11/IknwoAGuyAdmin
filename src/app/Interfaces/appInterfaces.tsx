@@ -41,6 +41,15 @@ export interface IProjects {
     tncs: string,
     ProjectId:string,
 }
+export interface Bidders {
+    id: string;
+    YourName: string;
+    companyEmail: string;
+    YourSurName:string;
+    companyName:string;
+    formSubmitted:string;
+    profileImage:string;
+  }
 export interface IReviews{
     Id: string,
     comment:string,

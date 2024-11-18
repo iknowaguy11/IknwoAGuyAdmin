@@ -33,6 +33,8 @@ export const customsubmitTheme: CustomFlowbiteTheme['button'] = {
         appsuccess: "text-white hover:text-white bg-appGreen border border-transparent enabled:hover:bg-appGreen focus:ring-4 focus:ring-green-300 dark:bg-appGreen dark:enabled:hover:bg-black dark:focus:ring-appGreen",
         success: "text-white bg-appGreen border border-transparent enabled:hover:bg-appGreen focus:ring-4 focus:ring-green-300 dark:bg-appGreen dark:enabled:hover:bg-black dark:focus:ring-appGreen focus:border-appGreen",
         light: "border border-gray-300 bg-white text-gray-900 focus:ring-4 focus:ring-green-300 enabled:hover:bg-appGreen hover:text-white dark:border-gray-600 dark:bg-gray-600 dark:text-white dark:focus:ring-green-300 dark:enabled:hover:border-gray-700 hover:text-white dark:enabled:hover:ring-green-300",
+        failure: "border border-transparent bg-red-700 text-white focus:ring-4 focus:ring-red-300 enabled:hover:bg-red-800 dark:bg-red-600 dark:focus:ring-red-900 dark:enabled:hover:bg-red-700",
+    
     }
 };
 

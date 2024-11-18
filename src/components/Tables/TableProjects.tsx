@@ -1,17 +1,19 @@
 "use client"
 
-import { ProjectActions } from "@/app/staticData/dummy";
 import { useState } from "react";
-import DefaultSelectOption from "../SelectOption/DefaultSelectOption";
 import { Button } from "flowbite-react";
 import { customsubmitTheme } from "@/app/customTheme/appTheme";
 import { useFetchProjects } from "@/_hooks/useFetch";
+import ModalBiddrs from "../Modal/ModalBidders";
+import { successMessage } from "@/app/notifications/successError";
 
 const TableProjects = () => {
-  const [selectedOption, setSelectedOption] = useState(ProjectActions[0]);
+  const [Competitors,setCompetitors]=useState<string[]>([]);
+  const [openModal, setOpenModal] = useState(false);
   const {ProjData}=useFetchProjects();
   const [currentPage, setCurrentPage] = useState(1);
   const [filter, setFilter] = useState("");
+  const [Buttonchoice,SetButtonchoice]=useState<string>("");
   const itemsPerPage = 4; // Set your items per page
 
   // Filter and paginate data
@@ -35,6 +37,24 @@ const TableProjects = () => {
     setCurrentPage(1); // Reset to the first page on filter change
   };
 
+  
+  const HandleActions=(id:string,CompetitorsIds:string[],selectedOption:string)=>{
+   setCompetitors([]);
+   if(CompetitorsIds.length==0){
+    return successMessage("No contractors Found.");
+   }
+    if(selectedOption!=="Bidders" && selectedOption!=="Delete") return;
+    SetButtonchoice(selectedOption);
+    if(selectedOption=="Bidders"){
+      setCompetitors([]);
+      setOpenModal(true);
+      setCompetitors(CompetitorsIds);
+    }else if(selectedOption=="Delete"){
+      setCompetitors([]);
+      setOpenModal(true);
+      setCompetitors(CompetitorsIds);
+    }
+  }
   return (
     <div className="rounded-[10px] border border-stroke bg-white p-4 shadow-1 dark:border-dark-3 dark:bg-gray-dark dark:shadow-card sm:p-7.5 mb-3">
       <div className="px-4 py-6 md:px-6 xl:px-9 flex justify-between items-center">
@@ -93,8 +113,12 @@ const TableProjects = () => {
                 <td className="border-[#eee] px-4 py-4 dark:border-dark-3 xl:pr-7.5 text-right">
                 <td className="border-[#eee] px-4 py-4 dark:border-dark-3 xl:pr-7.5 text-right">
                   {/* Actions buttons here */}
-                  <DefaultSelectOption options={ProjectActions} setSelectedOption={setSelectedOption}/>
-                  <Button size="xs" className="bg-appGreen mt-1" theme={customsubmitTheme} type="submit" color="appsuccess">submit</Button>
+                  
+                  <Button onClick={()=>HandleActions(packageItem.ProjectId,packageItem.AllcontactorKeys,"Delete")}
+                   size="xs" className="mt-1" theme={customsubmitTheme} type="submit" color="failure">Delete</Button>
+                   <Button onClick={()=>HandleActions(packageItem.ProjectId,packageItem.AllcontactorKeys,"Bidders")}
+                   size="xs" className="bg-appGreen mt-1" theme={customsubmitTheme} type="submit" color="appsuccess">Bidders</Button>
+                  
                 </td>
                 </td>
               </tr>
@@ -121,6 +145,7 @@ const TableProjects = () => {
           Next
         </button>
       </div>
+      <ModalBiddrs openModal={openModal} Buttonchoice={Buttonchoice} setOpenModal={setOpenModal} Competitors={Competitors} setCompetitors={setCompetitors}/>
     </div>
   );
 };

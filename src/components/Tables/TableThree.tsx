@@ -82,7 +82,7 @@ const TableProjects = () => {
           onChange={handleFilterChange}
           className="border border-stroke p-2 rounded dark:bg-dark-3 dark:text-white"
         />
-           <Button theme={customsubmitTheme} type="submit" color="appsuccess">Add</Button>
+           <Button onClick={()=>router.push('/register')} theme={customsubmitTheme} type="submit" color="appsuccess">Add</Button>
         </div>
                     
       </div>

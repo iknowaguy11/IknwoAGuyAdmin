@@ -8,6 +8,7 @@ const DefaultSelectOption = ({ options,setSelectedOption }: {setSelectedOption:D
   const [isOpen, setIsOpen] = useState(false);
 
   const handleOptionSelect = (option: string) => {
+    setSelectedOption("---");
     setSelectedOption(option);
     setIsOpen(false);
   };

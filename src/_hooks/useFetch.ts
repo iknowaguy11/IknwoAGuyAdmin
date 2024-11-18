@@ -2,7 +2,7 @@ import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { DefaultProjectObject, IAdmins, IBidCredits, IMedia_Inspirations, IProjects, IProvince, IReviews, IServices, IUser } from "../Interfaces/appInterfaces";
 import { collection, getDocs, onSnapshot, query, where } from "firebase/firestore";
 import { db } from "../DB/firebaseConnection";
-
+import { Bidders } from "@/app/Interfaces/appInterfaces";
 
 export const useFetchProvinces = () => {
 
@@ -37,6 +37,50 @@ export const useFetchProvinces = () => {
         return { ProvinceData, DataError, isLoading };
     }
 }
+  
+export const FetchBidders = (userIds: string[]) => {
+    const [users, setUsers] = useState<Bidders[]>([]);
+    const [loading, setLoading] = useState<boolean>(true);
+    const [error, setError] = useState<string | null>(null);
+  
+    useEffect(() => {
+      if (!userIds || userIds.length === 0) {
+        setLoading(false);
+        return;
+      }
+  
+      const usersRef = collection(db, 'Users');
+      const q = query(usersRef, where('__name__', 'in', userIds));
+  
+      const unsubscribe = onSnapshot(
+        q,
+        (querySnapshot) => {
+          const fetchedUsers: Bidders[] = querySnapshot.docs.map((doc) => ({
+            id: doc.id,
+            YourName:doc.data().YourName,
+            companyEmail:doc.data().companyEmail,
+            YourSurName:doc.data().YourSurName,
+            companyName:doc.data().companyName,
+            formSubmitted:doc.data().formSubmitted,
+            profileImage:doc.data().profileImage
+          }));
+          setUsers(fetchedUsers);
+          setLoading(false);
+          setError(null);
+        },
+        (err) => {
+          setError('Failed to fetch users');
+          setLoading(false);
+        }
+      );
+  
+      // Clean up subscription on unmount
+      return () => unsubscribe();
+    }, [userIds]);
+  
+    return { users, loading, error };
+  };
+  
 
 export const useFetchProjects = () => {
 
