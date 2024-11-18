@@ -17,8 +17,8 @@ const DefaultSelectOption = ({ options,setSelectedOption }: {setSelectedOption:D
     <ClickOutside onClick={() => setIsOpen(false)}>
       <Select onChange={(e) => handleOptionSelect(e?.target.value)} className="max-w-md" id="Service" theme={customselectTheme} color={"success"} required>
         {
-          options?.map((op:any)=>(
-            <option>{op}</option>
+          options?.map((op:any,index:any)=>(
+            <option key={index}>{op}</option>
           ))
         }
       </Select>

@@ -5,21 +5,21 @@ import { Button } from "flowbite-react";
 import { customsubmitTheme } from "@/app/customTheme/appTheme";
 import { useFetchProjects } from "@/_hooks/useFetch";
 import ModalBiddrs from "../Modal/ModalBidders";
-import { successMessage } from "@/app/notifications/successError";
+import { ConfirmModal } from "../Modal/ConfimModal";
 
 const TableProjects = () => {
-  const [Competitors,setCompetitors]=useState<string[]>([]);
-  const [openModal, setOpenModal] = useState(false);
-  const {ProjData}=useFetchProjects();
+  const [Competitors, setCompetitors] = useState<string[]>([]);
+  const [openModal, setOpenModal] = useState<boolean>(false);
+  const { ProjData } = useFetchProjects();
   const [currentPage, setCurrentPage] = useState(1);
   const [filter, setFilter] = useState("");
-  const [Buttonchoice,SetButtonchoice]=useState<string>("");
+  const [Buttonchoice, SetButtonchoice] = useState<string>("");
   const itemsPerPage = 4; // Set your items per page
-
+  const [confModal, setconfModal] = useState<boolean>(false);
   // Filter and paginate data
-  const filteredData = ProjData?.filter((packageItem:any) =>
-    packageItem.task.toLowerCase().includes(filter.toLowerCase()) || 
-  packageItem.owner.toLowerCase().includes(filter.toLowerCase())
+  const filteredData = ProjData?.filter((packageItem: any) =>
+    packageItem.task.toLowerCase().includes(filter.toLowerCase()) ||
+    packageItem.owner.toLowerCase().includes(filter.toLowerCase())
   );
   const totalPages = Math.ceil(filteredData.length / itemsPerPage);
   const currentData = filteredData.slice(
@@ -37,24 +37,41 @@ const TableProjects = () => {
     setCurrentPage(1); // Reset to the first page on filter change
   };
 
-  
-  const HandleActions=(id:string,CompetitorsIds:string[],selectedOption:string)=>{
-   setCompetitors([]);
-   if(CompetitorsIds.length==0){
-    return successMessage("No contractors Found.");
-   }
-    if(selectedOption!=="Bidders" && selectedOption!=="Delete") return;
+  let del = {
+    ownerEmail: "",
+    pId: ""
+  }
+  const handleDeleteAction = (obj: any, CompetitorsIds: string[], title: string) => {
+    //
+    del = {
+      ownerEmail: "",
+      pId: ""
+    }
+    setCompetitors([]);
+    SetButtonchoice(title);
+    if (title === "Delete") {
+      if (CompetitorsIds.length === 0) {
+        //ownerEmail={packageItem?.email} pId={packageItem?.ProjectId} 
+        del = {
+          ownerEmail: obj.email,
+          pId: obj.ProjectId
+        }
+        setconfModal(true);
+        return;
+      }
+    }
+  }
+  const HandleActions = (id: string, CompetitorsIds: string[], selectedOption: string) => {
+    setCompetitors([]);
     SetButtonchoice(selectedOption);
-    if(selectedOption=="Bidders"){
-      setCompetitors([]);
-      setOpenModal(true);
-      setCompetitors(CompetitorsIds);
-    }else if(selectedOption=="Delete"){
-      setCompetitors([]);
+
+    if (selectedOption === "Bidders") {
+
       setOpenModal(true);
       setCompetitors(CompetitorsIds);
     }
-  }
+  };
+
   return (
     <div className="rounded-[10px] border border-stroke bg-white p-4 shadow-1 dark:border-dark-3 dark:bg-gray-dark dark:shadow-card sm:p-7.5 mb-3">
       <div className="px-4 py-6 md:px-6 xl:px-9 flex justify-between items-center">
@@ -88,40 +105,41 @@ const TableProjects = () => {
                 </td>
                 <td className="border-[#eee] px-4 py-4 dark:border-dark-3 xl:pl-7.5">
                   <h5 className="text-dark dark:text-white">{packageItem.owner}</h5>
-                  
+
                 </td>
                 <td className="border-[#eee] px-4 py-4 dark:border-dark-3 xl:pl-7.5">
                   <h5 className="text-dark dark:text-white">{packageItem.task}</h5>
-                  
+
                 </td>
                 <td className="border-[#eee] px-4 py-4 dark:border-dark-3">
-                  <p className="text-dark dark:text-white">{"R"+packageItem.budget}</p>
+                  <p className="text-dark dark:text-white">{"R" + packageItem.budget}</p>
                 </td>
                 <td className="border-[#eee] px-4 py-4 dark:border-dark-3">
                   <p className="text-dark dark:text-white">{packageItem.postTime}</p>
                 </td>
                 <td className="border-[#eee] px-4 py-4 dark:border-dark-3">
-                  <p className={`inline-flex rounded-full px-3.5 py-1 text-body-sm font-medium ${
-                      packageItem.Status === "Active"
-                        ? "bg-[#219653]/[0.08] text-[#219653]"
-                        : "bg-[#D34053]/[0.08] text-[#D34053]"
+                  <p className={`inline-flex rounded-full px-3.5 py-1 text-body-sm font-medium ${packageItem.Status === "Active"
+                    ? "bg-[#219653]/[0.08] text-[#219653]"
+                    : "bg-[#D34053]/[0.08] text-[#D34053]"
                     }`}>
                     {packageItem.Status}
                   </p>
                 </td>
-                
+
                 <td className="border-[#eee] px-4 py-4 dark:border-dark-3 xl:pr-7.5 text-right">
-                <td className="border-[#eee] px-4 py-4 dark:border-dark-3 xl:pr-7.5 text-right">
-                  {/* Actions buttons here */}
-                  
-                  <Button onClick={()=>HandleActions(packageItem.ProjectId,packageItem.AllcontactorKeys,"Delete")}
-                   size="xs" className="mt-1" theme={customsubmitTheme} type="submit" color="failure">Delete</Button>
-                   <Button onClick={()=>HandleActions(packageItem.ProjectId,packageItem.AllcontactorKeys,"Bidders")}
-                   size="xs" className="bg-appGreen mt-1" theme={customsubmitTheme} type="submit" color="appsuccess">Bidders</Button>
-                  
+                  <td className="border-[#eee] px-4 py-4 dark:border-dark-3 xl:pr-7.5 text-right">
+                    {/* Actions buttons here */}
+
+                    <Button onClick={() => handleDeleteAction(packageItem, packageItem.AllcontactorKeys, "Delete")}
+                      size="xs" className="mt-1" theme={customsubmitTheme} type="submit" color="failure">Delete</Button>
+                    <Button onClick={() => HandleActions(packageItem.ProjectId, packageItem.AllcontactorKeys, "Bidders")}
+                      size="xs" className="bg-appGreen mt-1" theme={customsubmitTheme} type="submit" color="appsuccess">Bidders</Button>
+
+                  </td>
                 </td>
-                </td>
+
               </tr>
+
             ))}
           </tbody>
         </table>
@@ -145,7 +163,10 @@ const TableProjects = () => {
           Next
         </button>
       </div>
-      <ModalBiddrs openModal={openModal} Buttonchoice={Buttonchoice} setOpenModal={setOpenModal} Competitors={Competitors} setCompetitors={setCompetitors}/>
+      {/* <ModalBiddrs openModal={openModal} Buttonchoice={Buttonchoice} setOpenModal={setOpenModal} Competitors={Competitors} setCompetitors={setCompetitors}
+        ProjectIdBid={packageItem?.ProjectId} projectBudget={packageItem?.budget} otherOffers={packageItem?.otherOffers} bestOffer={packageItem?.bestOffer} bstOffrId={packageItem?.bstOffrId} AllcontactorKeys={packageItem?.AllcontactorKeys} homeownerPhone={packageItem?.phone} task={packageItem?.task} owner={packageItem?.owner} />
+       */}
+      <ConfirmModal size="md" ownerEmail={del?.ownerEmail} pId={del?.pId} message="Are you sure you want to delete this project?" confModal={confModal} setconfModal={setconfModal} />
     </div>
   );
 };
