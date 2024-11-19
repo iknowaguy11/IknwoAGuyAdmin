@@ -1,7 +1,7 @@
 import { Offline, Online } from "react-detect-offline";
 import { Button, Label, TextInput, Card, Select, Alert } from 'flowbite-react';
 import { NetworkMessage, NetworkTitle, customInputBoxTheme, customselectTheme, customsubmitTheme } from '@/app/customTheme/appTheme';
-import { FormEvent, useContext, useEffect, useState } from 'react';
+import { FormEvent, useEffect, useState } from 'react';
 import { HiInformationCircle } from 'react-icons/hi';
 import { useFetchProvinces } from "../_hooks/useFetch";
 import { doc, setDoc } from "firebase/firestore";
@@ -16,7 +16,9 @@ const TempAreas = () => {
     const [yourProv, setYourProv] = useState("");
     const [isProcessing, setIsProcessing] = useState(false);
     const [filteredTowns, setFilteredTowns] = useState([]);
+    const [filteredDeleteTowns, setfilteredDeleteTowns] = useState([]);
     const [provId, setProvId] = useState<string>("");
+    const [provDeleteId, setProvDeleteId] = useState<string>("");
     const [DBprovince, setDBprovince] = useState(ProvinceData);
     useEffect(() => {
         setDBprovince(ProvinceData);
@@ -35,6 +37,19 @@ const TempAreas = () => {
         let filtered: any = [];
         filtered = DBprovince?.filter((itm) => itm.province?.trim()?.toLowerCase() === prov?.trim()?.toLowerCase());
         setFilteredTowns(filtered.length > 0 ? filtered[0].Towns : []);
+        
+    }
+
+    // alllow delete
+    const filterToDeleteProvArray = (prov: string) => {
+
+        //setYourProv(prov);
+        const id = getProvId(prov);
+        setProvDeleteId(id);
+        let filtered: any = [];
+        filtered = DBprovince?.filter((itm) => itm.province?.trim()?.toLowerCase() === prov?.trim()?.toLowerCase());
+        setfilteredDeleteTowns(filtered.length > 0 ? filtered[0].Towns : []);
+        
     }
     const removeDuplicates = (array: any) => {
         const seen = new Set();
@@ -63,7 +78,7 @@ const TempAreas = () => {
     }
 
     return (
-        <div className="flex">
+        <div className="flex flex-wrap">
             <form onSubmit={submitDetails}>
                 <Card className='flex max-w-md gap-4 flex-grow mt-4 mb-4 ml-2'>
                     <h3 className="text-lg">Add Provinces and Towns</h3>
@@ -140,36 +155,13 @@ const TempAreas = () => {
             </form>
 
             <div className="max-w-md gap-4 flex-grow ml-2">
-                <div className="mb-2">
-                    <div className="mb-2 block">
-                        <Label htmlFor="Town" value="Add/Create a Province *" />
-                    </div>
-                    <TextInput
-                        theme={customInputBoxTheme}
-                        color={"focuscolor"}
-                        id="cmpName"
-                        type="text"
-                        placeholder="Provide a Province"
-                        required
-                        shadow
-                    />
-                </div>
-                <Online>
-                    <Button isProcessing={isProcessing} disabled={isProcessing} theme={customsubmitTheme} type="submit" color="appsuccess">
-                        Add Provice
-                    </Button>
-                </Online>
-                <Offline>
-                    <Alert color="failure" icon={HiInformationCircle}>
-                        <span className="font-medium">Info alert! </span>{NetworkTitle}
-                        <p className="text-xs text-gray-500">{NetworkMessage}</p>
-                    </Alert>
-                </Offline>
+                
                 <>
                     <p className="text-xs">Select a Province *</p>
+                    <p className="text-xs">Click from the list of sub-areas that you want to remove</p>
                     {DBprovince?.length > 0 && (
                         <Select
-
+                        onChange={(e) => filterToDeleteProvArray(e.target.value)}
                             className="max-w-md mb-2"
                             id="Service"
                             theme={customselectTheme}
@@ -183,18 +175,8 @@ const TempAreas = () => {
                         </Select>
                     )}
                 </>
-                <Areas/>
-                <Online>
-                    <Button isProcessing={isProcessing} disabled={isProcessing} theme={customsubmitTheme} type="submit" color="appsuccess">
-                        Update provice sub-areas
-                    </Button>
-                </Online>
-                <Offline>
-                    <Alert color="failure" icon={HiInformationCircle}>
-                        <span className="font-medium">Info alert! </span>{NetworkTitle}
-                        <p className="text-xs text-gray-500">{NetworkMessage}</p>
-                    </Alert>
-                </Offline>
+                <Areas filteredDeleteTowns={filteredDeleteTowns} setfilteredDeleteTowns={setfilteredDeleteTowns} provDeleteId={provDeleteId} setProvDeleteId={setProvDeleteId} />
+                
             </div>
 
         </div>

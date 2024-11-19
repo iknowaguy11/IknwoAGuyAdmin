@@ -6,7 +6,6 @@ import { AppContext } from "@/Context/appContext";
 const SidebarItem = ({ item, pageName, setPageName }: any) => {
   const {SetTab}=useContext(AppContext);
   const handleClick = (route:string) => {
-    console.log(route);
     SetTab(route?.trim().toLocaleLowerCase()=="dashboard" ? "first" : route?.trim().toLocaleLowerCase()=="search engine" ? "second" : route?.trim().toLocaleLowerCase()=="inspirations" ? "third" :null );
     const updatedPageName =
       pageName !== item.label.toLowerCase() ? item.label.toLowerCase() : "";
