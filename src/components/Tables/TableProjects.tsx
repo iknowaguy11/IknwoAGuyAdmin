@@ -6,9 +6,12 @@ import { customsubmitTheme } from "@/app/customTheme/appTheme";
 import { useFetchProjects } from "@/_hooks/useFetch";
 import ModalBiddrs from "../Modal/ModalBidders";
 import { ConfirmModal } from "../Modal/ConfimModal";
+import { IProjects } from "@/Interfaces/appInterfaces";
+import { toFloat } from "validator";
 
 const TableProjects = () => {
-  const [Competitors, setCompetitors] = useState<string[]>([]);
+  const [projectData, setprojectData] = useState<IProjects | any>();
+  const [projectDelete, setprojectDelete] = useState<IProjects | any>();
   const [openModal, setOpenModal] = useState<boolean>(false);
   const { ProjData } = useFetchProjects();
   const [currentPage, setCurrentPage] = useState(1);
@@ -37,38 +40,30 @@ const TableProjects = () => {
     setCurrentPage(1); // Reset to the first page on filter change
   };
 
-  let del = {
-    ownerEmail: "",
-    pId: ""
-  }
-  const handleDeleteAction = (obj: any, CompetitorsIds: string[], title: string) => {
-    //
-    del = {
-      ownerEmail: "",
-      pId: ""
+  const handleDeleteAction = (p: IProjects, selectedOption: string) => {
+    setprojectDelete(null);
+    SetButtonchoice(selectedOption);
+    if(selectedOption === "Delete" && p.AllcontactorKeys.length>0){
+      setOpenModal(true);
+      setconfModal(false);
+      setprojectData(p);
+      return;
     }
-    setCompetitors([]);
-    SetButtonchoice(title);
-    if (title === "Delete") {
-      if (CompetitorsIds.length === 0) {
-        //ownerEmail={packageItem?.email} pId={packageItem?.ProjectId} 
-        del = {
-          ownerEmail: obj.email,
-          pId: obj.ProjectId
-        }
-        setconfModal(true);
-        return;
-      }
+
+    if (selectedOption === "Delete") {
+      setconfModal(true);
+      setOpenModal(false);
+      setprojectDelete(p);
     }
   }
-  const HandleActions = (id: string, CompetitorsIds: string[], selectedOption: string) => {
-    setCompetitors([]);
+  const HandleActions = (p: IProjects, selectedOption: string) => {
+    setprojectData(null);
     SetButtonchoice(selectedOption);
 
     if (selectedOption === "Bidders") {
-
       setOpenModal(true);
-      setCompetitors(CompetitorsIds);
+      setconfModal(false);
+      setprojectData(p);
     }
   };
 
@@ -98,6 +93,7 @@ const TableProjects = () => {
             </tr>
           </thead>
           <tbody>
+          
             {currentData.map((packageItem, index) => (
               <tr key={index}>
                 <td className="border-[#eee] px-4 py-4 dark:border-dark-3 xl:pl-7.5">
@@ -112,7 +108,7 @@ const TableProjects = () => {
 
                 </td>
                 <td className="border-[#eee] px-4 py-4 dark:border-dark-3">
-                  <p className="text-dark dark:text-white">{"R" + packageItem.budget}</p>
+                  <p className="text-dark dark:text-white">{"R" + toFloat(packageItem.budget)?.toFixed(2)}</p>
                 </td>
                 <td className="border-[#eee] px-4 py-4 dark:border-dark-3">
                   <p className="text-dark dark:text-white">{packageItem.postTime}</p>
@@ -130,9 +126,9 @@ const TableProjects = () => {
                   <td className="border-[#eee] px-4 py-4 dark:border-dark-3 xl:pr-7.5 text-right">
                     {/* Actions buttons here */}
 
-                    <Button onClick={() => handleDeleteAction(packageItem, packageItem.AllcontactorKeys, "Delete")}
+                    <Button onClick={() => handleDeleteAction(packageItem, "Delete")}
                       size="xs" className="mt-1" theme={customsubmitTheme} type="submit" color="failure">Delete</Button>
-                    <Button onClick={() => HandleActions(packageItem.ProjectId, packageItem.AllcontactorKeys, "Bidders")}
+                    <Button onClick={() => HandleActions(packageItem, "Bidders")}
                       size="xs" className="bg-appGreen mt-1" theme={customsubmitTheme} type="submit" color="appsuccess">Bidders</Button>
 
                   </td>
@@ -163,10 +159,10 @@ const TableProjects = () => {
           Next
         </button>
       </div>
-      {/* <ModalBiddrs openModal={openModal} Buttonchoice={Buttonchoice} setOpenModal={setOpenModal} Competitors={Competitors} setCompetitors={setCompetitors}
-        ProjectIdBid={packageItem?.ProjectId} projectBudget={packageItem?.budget} otherOffers={packageItem?.otherOffers} bestOffer={packageItem?.bestOffer} bstOffrId={packageItem?.bstOffrId} AllcontactorKeys={packageItem?.AllcontactorKeys} homeownerPhone={packageItem?.phone} task={packageItem?.task} owner={packageItem?.owner} />
-       */}
-      <ConfirmModal size="md" ownerEmail={del?.ownerEmail} pId={del?.pId} message="Are you sure you want to delete this project?" confModal={confModal} setconfModal={setconfModal} />
+
+      <ModalBiddrs openModal={openModal} Buttonchoice={Buttonchoice} setOpenModal={setOpenModal} projectData={projectData} setprojectData={setprojectData} />
+
+      <ConfirmModal size="md" projectDelete={projectDelete} setprojectDelete={setprojectDelete} message="Are you sure you want to delete this project?" confModal={confModal} setconfModal={setconfModal} />
     </div>
   );
 };

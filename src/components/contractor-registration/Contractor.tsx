@@ -397,7 +397,7 @@ const ContractorRegistration = () => {
                                 </div>
                             </Avatar>
                         </div>
-                        <p className="text-xs text-black">Are you a business or a skilled individual?.</p>
+                        <p className="text-xs">Are you a business or a skilled individual?.</p>
 
                         <label className="inline-flex items-center me-5 cursor-pointer">
                             <span className="me-3 text-sm font-medium text-gray-900 dark:text-gray-300">Business</span>

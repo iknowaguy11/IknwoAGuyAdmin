@@ -2,16 +2,14 @@
 "use client";
 
 import { handlerDelete } from "@/app/Controllers/DeleteDocument";
+import { IProjects } from "@/Interfaces/appInterfaces";
 import { Button, Modal } from "flowbite-react";
 import { Dispatch, SetStateAction } from "react";
 import { HiOutlineExclamationCircle } from "react-icons/hi";
 
-export function ConfirmModal({size,ownerEmail,pId, message, confModal, setconfModal }: { size: string,ownerEmail:string,pId:string ,message: string, confModal: boolean, setconfModal: Dispatch<SetStateAction<boolean>> }) {
-    console.log(pId);
-
+export function ConfirmModal({size,projectDelete,setprojectDelete, message, confModal, setconfModal }: { size: string,projectDelete:IProjects, setprojectDelete: Dispatch<SetStateAction<IProjects|any>>,message: string, confModal: boolean, setconfModal: Dispatch<SetStateAction<boolean>> }) {
     return (
         <>
-            
             <Modal show={confModal} size={size} onClose={() => setconfModal(false)} popup>
                 <Modal.Header />
                 <Modal.Body>
@@ -22,8 +20,9 @@ export function ConfirmModal({size,ownerEmail,pId, message, confModal, setconfMo
                         </h3>
                         <div className="flex justify-center gap-4">
                             <Button color="failure" onClick={() => {
-                                handlerDelete("Projects",pId.trim(),ownerEmail);
+                                handlerDelete("Projects",projectDelete?.ProjectId.trim(),projectDelete?.email);
                                 setconfModal(false);
+                                setprojectDelete(null);
                             }}>
                                 {"Yes, I'm sure"}
                             </Button>

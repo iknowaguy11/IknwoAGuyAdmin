@@ -3,25 +3,23 @@
 import { FetchBidders } from "@/_hooks/useFetch";
 import { BalanceCheckNupdate } from "@/app/Controllers/RefundToken";
 import { customsubmitTheme } from "@/app/customTheme/appTheme";
-import { failureMessage } from "@/app/notifications/successError";
-import { IOtherOffers } from "@/Interfaces/appInterfaces";
+import { IProjects } from "@/Interfaces/appInterfaces";
 import { Alert, Button, Card, Modal } from "flowbite-react";
 import Image from "next/image";
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction } from "react";
 
-const ModalBiddrs = ({ openModal, Buttonchoice, setOpenModal, Competitors, setCompetitors ,
-     ProjectIdBid, projectBudget, otherOffers, bestOffer, bstOffrId, AllcontactorKeys, homeownerPhone, task, owner
-}: { openModal: boolean, Buttonchoice:string, setOpenModal: Dispatch<SetStateAction<boolean>>, Competitors: string[], setCompetitors: Dispatch<SetStateAction<string[]>> ,
-    ProjectIdBid:string, projectBudget:string, otherOffers:IOtherOffers[], bestOffer:string, bstOffrId:string, AllcontactorKeys: string[], homeownerPhone:string, task:string, owner:string
+const ModalBiddrs = ({ openModal, Buttonchoice, setOpenModal, projectData, setprojectData ,
+     
+}: { openModal: boolean, Buttonchoice:string, setOpenModal: Dispatch<SetStateAction<boolean>>, projectData:IProjects, setprojectData: Dispatch<SetStateAction<IProjects|any>>
 }) => {
-    const { users, loading, error } = FetchBidders(Competitors);
+    const { users} = FetchBidders(projectData?.AllcontactorKeys);
 
     return (
         <>
             <Modal className="mt-4 mb-1" show={openModal} onClose={() => setOpenModal(false)}>
                 <Modal.Header>Bidders</Modal.Header>
                 <Modal.Body>
-                    {Buttonchoice.trim().toLocaleLowerCase()=="delete" && Competitors.length>0 ? (<Alert className="mb-2" color="failure" rounded>
+                    {Buttonchoice.trim().toLocaleLowerCase()=="delete" && projectData?.AllcontactorKeys.length>0 ? (<Alert className="mb-2" color="failure" rounded>
                             <span className="font-medium">Info alert!</span> This project appears to be active and has bidders on it. Refund all bidders before attempting to delete it.
                         </Alert>) : null}
                     <div className="space-y-6">
@@ -53,7 +51,7 @@ const ModalBiddrs = ({ openModal, Buttonchoice, setOpenModal, Competitors, setCo
                                                     <p className="truncate text-sm text-gray-500 dark:text-gray-400">{u?.companyEmail}</p>
                                                 </div>
                                                 <div className="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white">{""}</div>
-                                                <Button onClick={()=>BalanceCheckNupdate(u.id,u.companyEmail,setOpenModal, ProjectIdBid, projectBudget, otherOffers, bestOffer, bstOffrId,AllcontactorKeys,homeownerPhone,task,owner )}
+                                                <Button onClick={()=>BalanceCheckNupdate(u.id,u.companyEmail,setOpenModal, projectData.ProjectId, projectData.budget, projectData.otherOffers, projectData.bestOffer, projectData.bstOffrId,projectData.AllcontactorKeys,projectData.phone,projectData.task,projectData.owner )}
                                                     size="xs" className="bg-appGreen mt-1" theme={customsubmitTheme} type="submit" color="appsuccess">Refund Token</Button>
                                                     
                                             </div>

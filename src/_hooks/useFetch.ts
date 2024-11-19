@@ -45,13 +45,14 @@ export const FetchBidders = (userIds: string[]) => {
   
     useEffect(() => {
       if (!userIds || userIds.length === 0) {
+        setUsers([]);
         setLoading(false);
         return;
       }
   
       const usersRef = collection(db, 'Users');
       const q = query(usersRef, where('__name__', 'in', userIds));
-  
+
       const unsubscribe = onSnapshot(
         q,
         (querySnapshot) => {
