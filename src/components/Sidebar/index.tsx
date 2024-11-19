@@ -40,7 +40,7 @@ const menuGroups = [
           </svg>
         ),
         label: "Dashboard",
-        route: "/",
+        route: "Dashboard",
         
       },
       {
@@ -66,7 +66,7 @@ const menuGroups = [
           </svg>
         ),
         label: "Search Engine",
-        route: "/",
+        route: "Search Engine",
         
       },
       {
@@ -92,7 +92,7 @@ const menuGroups = [
           </svg>
         ),
         label: "Inspirations",
-        route: "/",
+        route: "Inspirations",
         
       },
 

@@ -4,8 +4,10 @@ import React, { createContext, useState, Dispatch, SetStateAction, useEffect } f
 interface AppContextType{
     isLoggedIn: boolean;
     setLoggedIn: Dispatch<SetStateAction<boolean>>;
-    ukey:string|null,
+    ukey:string|null;
     SetUkey:Dispatch<SetStateAction<string | null>>;
+    Tab:string|null;
+    SetTab:Dispatch<SetStateAction<string|null>>;
 
     //current user selected
     clientKey:string|null,
@@ -21,6 +23,9 @@ const AppContext = createContext<AppContextType>({
     ukey:null,
     SetUkey: (): null => null,
     clientKey:null,
+    Tab:null,
+    SetTab:():string|null => null,
+
     SetClientKey: (): null => null,
     isAuthenticated:false, 
     setIsAuthenticated:(): boolean => false
@@ -31,6 +36,7 @@ const AppProvider = ({ children }: { children: any }) => {
     const [clientKey,SetClientKey]=useState<string | null>(null);
     const [isLoggedIn, setLoggedIn] = useState<boolean>(false);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const[Tab,SetTab]=useState<string|null>("first");
     useEffect(()=>{
         SetUkey(window?.sessionStorage?.getItem("ukey")!==undefined && window?.sessionStorage?.getItem("ukey")!==null && window?.sessionStorage?.getItem("ukey")!=="" ? window?.sessionStorage?.getItem("ukey") :null);
         setLoggedIn(ukey && ukey!==null && ukey.length>10? true:false);
@@ -38,6 +44,7 @@ const AppProvider = ({ children }: { children: any }) => {
     return (
         <AppContext.Provider value={{
             ukey,SetUkey,
+            Tab,SetTab,
             clientKey,SetClientKey,
             isLoggedIn, setLoggedIn,
             isAuthenticated, setIsAuthenticated

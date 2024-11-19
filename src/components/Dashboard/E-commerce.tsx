@@ -1,23 +1,19 @@
 "use client";
-import React, { useEffect } from "react";
-import ChartThree from "../Charts/ChartThree";
-import ChartTwo from "../Charts/ChartTwo";
-import ChatCard from "../Chat/ChatCard";
-import TableOne from "../Tables/TableOne";
-import MapOne from "../Maps/MapOne";
+import React, { useContext, useEffect } from "react";
 import DataStatsOne from "@/components/DataStats/DataStatsOne";
-import ChartOne from "@/components/Charts/ChartOne";
 import TableThree from "../Tables/TableThree";
 import TableProjects from "../Tables/TableProjects";
 import { useRouter } from "next/navigation";
+import { AppContext } from "@/Context/appContext";
+import SerachEngine from "../SearchEngine";
 
 const ECommerce: React.FC = () => {
   const router = useRouter();
+  const {Tab}=useContext(AppContext);
     useEffect(() => {
         if (window?.sessionStorage?.getItem("ukey") == undefined || window?.sessionStorage?.getItem("ukey") == null || window?.sessionStorage?.getItem("ukey") == "") {
             router.replace('/login');
             window.location.href='/login';
-            
         }
 
     }, [router]);
@@ -25,8 +21,20 @@ const ECommerce: React.FC = () => {
     <>
       <DataStatsOne />
       <div className="gap-3 pt-3 pb-3">
-      <TableThree />
-      <TableProjects />
+
+      {
+        Tab=="first" ?
+        (
+          <>
+        <TableThree />
+        <TableProjects />
+        </>
+        ) : Tab=="second" ?
+        (
+          <SerachEngine/>
+        ) : Tab=="third" ? 
+        (<p>third</p>) :null
+      }
       </div>
     </>
   );
