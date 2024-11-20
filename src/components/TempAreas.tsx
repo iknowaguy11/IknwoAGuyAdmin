@@ -1,13 +1,16 @@
 import { Offline, Online } from "react-detect-offline";
-import { Button, Label, TextInput, Card, Select, Alert } from 'flowbite-react';
+import { Button, Label, TextInput, Card, Select, Alert, Badge } from 'flowbite-react';
 import { NetworkMessage, NetworkTitle, customInputBoxTheme, customselectTheme, customsubmitTheme } from '@/app/customTheme/appTheme';
 import { FormEvent, useEffect, useState } from 'react';
-import { HiInformationCircle } from 'react-icons/hi';
+import { HiInformationCircle,HiTrash } from 'react-icons/hi';
 import { useFetchProvinces } from "../_hooks/useFetch";
 import { doc, setDoc } from "firebase/firestore";
 import { db } from "../DB/firebaseConnection";
 import { failureMessage, successMessage } from "@/app/notifications/successError";
 import { Areas } from "./Badges/Areas";
+import { AddDocument } from "@/app/Controllers/AddDocument";
+import { Divider } from "antd";
+import { Del_All } from "./Modal/DeleteAll_ser_prov";
 
 const TempAreas = () => {
 
@@ -20,6 +23,8 @@ const TempAreas = () => {
     const [provId, setProvId] = useState<string>("");
     const [provDeleteId, setProvDeleteId] = useState<string>("");
     const [DBprovince, setDBprovince] = useState(ProvinceData);
+    const [ProvGroup, SetProvGroup] = useState("");
+    const [delParent,setDeleteParent]=useState(false);
     useEffect(() => {
         setDBprovince(ProvinceData);
     }, [ProvinceData]);
@@ -37,19 +42,19 @@ const TempAreas = () => {
         let filtered: any = [];
         filtered = DBprovince?.filter((itm) => itm.province?.trim()?.toLowerCase() === prov?.trim()?.toLowerCase());
         setFilteredTowns(filtered.length > 0 ? filtered[0].Towns : []);
-        
-    }
 
+    }
+    const [YourDeleteProv,setYourDeleteProv]=useState("");
     // alllow delete
     const filterToDeleteProvArray = (prov: string) => {
 
-        //setYourProv(prov);
+        setYourDeleteProv(prov);
         const id = getProvId(prov);
         setProvDeleteId(id);
         let filtered: any = [];
         filtered = DBprovince?.filter((itm) => itm.province?.trim()?.toLowerCase() === prov?.trim()?.toLowerCase());
         setfilteredDeleteTowns(filtered.length > 0 ? filtered[0].Towns : []);
-        
+
     }
     const removeDuplicates = (array: any) => {
         const seen = new Set();
@@ -75,6 +80,11 @@ const TempAreas = () => {
             setIsProcessing(false);
             failureMessage("Error: " + error?.message);
         });
+    }
+
+    const Handlesubmit = (e: FormEvent) => {
+        e.preventDefault();
+        AddDocument("Provinces", ProvGroup).then(()=>SetProvGroup(""));
     }
 
     return (
@@ -155,13 +165,36 @@ const TempAreas = () => {
             </form>
 
             <div className="max-w-md gap-4 flex-grow ml-2">
-                
+
                 <>
+                    <div className="border p-2 rounded z-9 shadow-4 mb-2 mt-4">
+                        <p className="text-xs">Create/Add a Provinces</p>
+                        <div className="flex flex-wrap gap-2">
+                            <form onSubmit={(e) => Handlesubmit(e)}>
+                                <Button size="xs" theme={customsubmitTheme} type="submit" color="appsuccess">
+                                    add Provinces
+                                </Button>
+                                <TextInput
+                                    className="mt-2"
+                                    onChange={(e) => SetProvGroup(e?.target.value)}
+                                    value={ProvGroup}
+                                    theme={customInputBoxTheme}
+                                    color={"focuscolor"}
+                                    id="gprov"
+                                    type="text"
+                                    placeholder="Provide Provinces"
+                                    required
+                                    shadow
+                                />
+                            </form>
+
+                        </div>
+                    </div>
                     <p className="text-xs">Select a Province *</p>
-                    <p className="text-xs">Click from the list of sub-areas that you want to remove</p>
+                    <p className="text-xs">Select from the list of sub-areas that you want to remove</p>
                     {DBprovince?.length > 0 && (
                         <Select
-                        onChange={(e) => filterToDeleteProvArray(e.target.value)}
+                            onChange={(e) => filterToDeleteProvArray(e.target.value)}
                             className="max-w-md mb-2"
                             id="Service"
                             theme={customselectTheme}
@@ -175,10 +208,12 @@ const TempAreas = () => {
                         </Select>
                     )}
                 </>
-                <Areas filteredDeleteTowns={filteredDeleteTowns} setfilteredDeleteTowns={setfilteredDeleteTowns} provDeleteId={provDeleteId} setProvDeleteId={setProvDeleteId} />
-                
+                {YourDeleteProv!=="" ? (<Badge onClick={()=>setDeleteParent(true)} className="hover:cursor-pointer w-fit" icon={HiTrash} color="failure">{YourDeleteProv}</Badge>
+                ):null}
+                <Divider/>
+                <Areas table={"Provinces"} filteredDeleteTowns={filteredDeleteTowns} setfilteredDeleteTowns={setfilteredDeleteTowns} provDeleteId={provDeleteId} setProvDeleteId={setProvDeleteId} />
             </div>
-
+            <Del_All delParent={delParent} setDeleteParent={setDeleteParent} provDeleteId={provDeleteId} table={"Provinces"} />
         </div>
     );
 }

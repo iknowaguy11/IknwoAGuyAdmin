@@ -12,7 +12,7 @@ import { Offline, Online } from "react-detect-offline";
 import { HiTrash } from "react-icons/hi";
 import { HiInformationCircle } from 'react-icons/hi';
 
-export function Areas({table, filteredDeleteTowns,setfilteredDeleteTowns,provDeleteId,setProvDeleteId }:
+export function SubServices({table, filteredDeleteTowns,setfilteredDeleteTowns,provDeleteId,setProvDeleteId }:
    {table:string, filteredDeleteTowns: any,setfilteredDeleteTowns:Dispatch<SetStateAction<any>>,provDeleteId:string,setProvDeleteId:Dispatch<SetStateAction<string>> }) {
     const [Isprocessing,SetIsprocessing]=useState<boolean>(false);
     const router=useRouter();
@@ -21,7 +21,7 @@ export function Areas({table, filteredDeleteTowns,setfilteredDeleteTowns,provDel
       
       setDoc(doc(db, table.trim(), provDeleteId.trim()), table=="Provinces" ? {Towns:filteredDeleteTowns} : table=="Services" ? {actualTask:filteredDeleteTowns}:null, { merge: true }).then(() => {
         SetIsprocessing(false);
-        successMessage("Updated Provinces data");
+        successMessage("Updated Services data");
         router.refresh();
     }).catch((error: any) => {
         SetIsprocessing(false);
@@ -33,7 +33,7 @@ export function Areas({table, filteredDeleteTowns,setfilteredDeleteTowns,provDel
       {
         filteredDeleteTowns?.map((i: any,index:any) => (
           <Badge color="warning" key={index} onClick={()=>
-            setfilteredDeleteTowns(filteredDeleteTowns.filter((ar:any)=>ar.area!==i.area))} className="hover:cursor-pointer" icon={HiTrash}>{i.area}</Badge>
+            setfilteredDeleteTowns(filteredDeleteTowns.filter((ar:any)=>ar.task!==i.task))} className="hover:cursor-pointer" icon={HiTrash}>{i.task}</Badge>
         ))
       }
       {
@@ -41,7 +41,7 @@ export function Areas({table, filteredDeleteTowns,setfilteredDeleteTowns,provDel
           <>
             <Online>
               <Button onClick={()=>HandleUpdate()} isProcessing={Isprocessing} disabled={Isprocessing} theme={customsubmitTheme} type="submit" color="appsuccess">
-                Update provice sub-areas
+                Update sub-sevices
               </Button>
             </Online>
             <Offline>
