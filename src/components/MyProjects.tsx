@@ -46,7 +46,7 @@ const MyProjects = ({ item }: { item: IProjects }) => {
                 {
                     item.winnerId !== "noId" && item?.otherOffers.length > 0 && <AwardedToDetails contractorId={item.winnerId} homeOwnerId={item.ownerId} owner={item.owner} profpic={item.Profpic}/>
                 }
-                {item.Status == "Active" ? <>{item?.otherOffers.length > 0 ? null : null} {item?.otherOffers.length <= 0 ? <Tooltip className="self-center" content="You can delete a project only if N0. of Bids Received : 0" style="dark"><HiOutlineTrash onClick={() => handlerDelete("Projects", item.ProjectId.trim())} className="mr-2 h-5 w-5 self-center hover:cursor-pointer" /></Tooltip> : null}</> : null}
+                {item.Status == "Active" ? <>{item?.otherOffers.length > 0 ? null : null} {item?.otherOffers.length <= 0 ? <Tooltip className="self-center" content="You can delete a project only if N0. of Bids Received : 0" style="dark"><HiOutlineTrash onClick={() => handlerDelete("Projects", item.ProjectId.trim(),"")} className="mr-2 h-5 w-5 self-center hover:cursor-pointer" /></Tooltip> : null}</> : null}
             </div>
         </div>
     );

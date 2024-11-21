@@ -38,7 +38,7 @@ const ReviewsTemplate = ({ revdata, contractorId }: { revdata: IReviews, contrac
             <p className="w-full">{revdata?.comment}</p>
             {
                 ukey===revdata?.homeOwnerId ? 
-                <Button onClick={()=>handlerDelete("Ratings",revdata.Id)} color="success" size={"sm"} theme={customsubmitTheme} pill>
+                <Button onClick={()=>handlerDelete("Ratings",revdata.Id,"")} color="success" size={"sm"} theme={customsubmitTheme} pill>
                 <HiTrash className="mr-2 h-5 w-5" /> remove
             </Button> 
             : null

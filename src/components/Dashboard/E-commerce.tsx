@@ -6,6 +6,7 @@ import TableProjects from "../Tables/TableProjects";
 import { useRouter } from "next/navigation";
 import { AppContext } from "@/Context/appContext";
 import SerachEngine from "../SearchEngine";
+import Inspirations from "../Inspirations";
 
 const ECommerce: React.FC = () => {
   const router = useRouter();
@@ -33,7 +34,7 @@ const ECommerce: React.FC = () => {
         (
           <SerachEngine/>
         ) : Tab=="third" ? 
-        (<p>third</p>) :null
+        (<Inspirations/>) :null
       }
       </div>
     </>
