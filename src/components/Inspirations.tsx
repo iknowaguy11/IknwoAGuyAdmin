@@ -40,8 +40,9 @@ const Inspirations = () => {
                                 className="aspect-[4/3] object-cover"
                             />
                             <div className="flex-wrap absolute z-10 bottom-0 bg-opacity-75 bg-black p-3">
-                                <h5 id={index == 4 ? 'inspirations' : ''} className="text-2xl font-bold tracking-tight text-white dark:text-white hover:text-appGreen">
+                                <h5 onClick={() => router.push("inspirations/" + item.sharelink)} id={index == 4 ? 'inspirations' : ''} className="text-2xl font-bold tracking-tight text-white dark:text-white hover:text-appGreen">
                                     {item.tittle}
+                                    
                                 </h5>
                                 <p className="font-normal text-stone-100 dark:text-stone-100">
                                     {item.caption}

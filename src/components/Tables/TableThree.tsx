@@ -44,7 +44,7 @@ const TableProjects = () => {
 
   const HandleActions=(id:string,currntperm:string)=>{
     if(selectedOption==='---') return;
-    if(selectedOption=="revoke"){
+    if(selectedOption=="block/unblock"){
       updatePermission(id,{isactive:currntperm=="no" ? "yes":"no"});
     }else if(selectedOption=="delete"){
       DeleteUser(id.trim());

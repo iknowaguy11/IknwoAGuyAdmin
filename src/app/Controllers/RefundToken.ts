@@ -30,7 +30,7 @@ export const BalanceCheckNupdate = async (
                         setDoc(doc(db, 'Projects', ProjectIdBid.trim()), update, { merge: true }).then(async() => {
                             //setIsProcessing(false);
                             successMessage("successful refund");
-                            SendEmailToBidder("futurekgaphola@gmail.com",task,owner);
+                            SendEmailToBidder(companyEmail,task,owner);
                             setOpenModal(false);
                             let updateBalance={
                                 credit:Creditbalance+1,

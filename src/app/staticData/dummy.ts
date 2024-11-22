@@ -1,6 +1,6 @@
 import { IProjects, IUser } from "../Interfaces/appInterfaces";
 
-export const UserActions=["---","delete","revoke","profile"];
+export const UserActions=["---","delete","block/unblock","profile"];
 
 export const ProjectActions=["---","delete","Bidders"];
 export const userData: IUser[] = [

@@ -6,6 +6,7 @@ import { customsubmitTheme } from "@/app/customTheme/appTheme";
 import { useFetchInspirations } from "@/_hooks/useFetch";
 import DefaultLayout from "@/components/Layouts/DefaultLaout";
 import Inspiration_Fileupload from "@/components/Inspiration_Fileupload";
+import { DeleteFirebase_file } from "@/app/Controllers/Deletemediafile";
 
 
 const Inspirations = ({ params }: { params: { slug: string[] } }) => {
@@ -36,22 +37,22 @@ const Inspirations = ({ params }: { params: { slug: string[] } }) => {
                                 <div className="flex-wrap absolute z-10 bottom-0 bg-opacity-75 bg-black p-3">
 
                                     <div className="flex flex-wrap gap-1">
+                                        
                                         <Button size="xs" className="text-nowrap" onClick={() => router.push(item?.url)} theme={customsubmitTheme} color="appsuccess">Full View</Button>
                                         <Button size="xs" className="text-nowrap" onClick={() => navigator?.clipboard.writeText(item?.url)} theme={customsubmitTheme} color="appsuccess">Share Image</Button>
-                                        <Button size="xs" className="text-nowrap" theme={customsubmitTheme} color="failure">Delete</Button>
+                                        <Button size="xs" className="text-nowrap" onClick={()=>DeleteFirebase_file(item.category,item.name,params.slug[0],item.url,"Media_Inspirations")} theme={customsubmitTheme} color="failure">Delete</Button>
                                     </div>
                                 </div>
                             </div>
                         ))}
                     </div>
-                    {InspirationData?.length == 0 ? <div className="ml-4 mt-16">
+                    {InspirationData?.length == 0 ? <div className="ml-4 mt-10">
 
                         <Alert color="warning" rounded>
                             {isLoading ? <Spinner className="m-2" aria-label="Extra large spinner" size="xl" /> : <><span className="font-medium">Info alert!</span> No Inspiration Images found in this category</>}
-
                             <Button onClick={() => router.replace('/')} theme={customsubmitTheme} color="appsuccess">Home</Button>
                         </Alert>
-
+                        
 
                     </div> : null}
 

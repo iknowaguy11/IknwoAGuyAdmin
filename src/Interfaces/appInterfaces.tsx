@@ -194,13 +194,13 @@ export const DefaultProjectObject =
 
 interface Media{
     category:string,
-    Filename:string,
+    name:string,
     url:string
 }
 export interface IMedia_Inspirations{
     documentId:string,
     category:string,
-    media:Media[]
+    media:Media[],
 }
 export interface IRecommendationDetails{
     contName:string,
