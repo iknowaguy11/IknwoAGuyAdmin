@@ -11,7 +11,7 @@ import { DeleteFirebase_file } from "@/app/Controllers/Deletemediafile";
 
 const Inspirations = ({ params }: { params: { slug: string[] } }) => {
     const router = useRouter();
-    const { InspirationData, isLoading } = useFetchInspirations(params?.slug[0].replaceAll('-', " "));
+    const { InspirationData, isLoading } = useFetchInspirations(params?.slug[0].trim());
     const paths_Segments = [
         "Bedroom", "Bathroom", "Kitchen", "Interior-Decor", "Landscape", "Home-Exterior", "Dining-Room", "Kids-Room"
     ]
@@ -19,7 +19,7 @@ const Inspirations = ({ params }: { params: { slug: string[] } }) => {
         return (
             <DefaultLayout>
                 <div className={InspirationData?.length == 0 ? "h-dvh" : "mt-20 "}>
-                    <Inspiration_Fileupload />
+                    <Inspiration_Fileupload category={params.slug[0]}/>
                     <div className="flex-row justify-between m-4 grid gap-3 sm:grid-cols-2 md:grid-cols-2 xm:grid-cols-1 lg:grid-cols-4 xl:grid-cols-4 xs:grid-cols-1 justify-items-center mt-5 bg-slate-50 overflow-hidden p-2 rounded-md">
                         {InspirationData[0]?.media?.map((item, index) => (
                             <div

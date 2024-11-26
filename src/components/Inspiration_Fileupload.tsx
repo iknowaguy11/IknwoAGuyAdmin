@@ -9,11 +9,12 @@ import { Button, FileInput, Label } from "flowbite-react";
 import { useState } from "react";
 import { v4 } from "uuid";
 
-const InspirationFileUpload = () => {
+const InspirationFileUpload = ({category}:{category:string}) => {
     const [imageFile, setImageFile] = useState<File | null>(null);
+    const [isProcessing,SetisProcessing]=useState(false);
 
     const validateImageFile = (file: File): boolean => {
-        const maxFileSizeMB = 5; // Restrict to 5MB
+        const maxFileSizeMB = 50; // Restrict to 50MB
         const allowedFileTypes = ['image/jpeg', 'image/png', 'image/jpg'];
 
         if (!allowedFileTypes.includes(file.type)) {
@@ -34,31 +35,33 @@ const InspirationFileUpload = () => {
         }
     };
 
-    const uploadProfileImage = async () => {
+    const uploadMediaImage = async () => {
         if (!imageFile) {
             alert("No file selected.");
             return;
         }
 
         const filename = `${imageFile.name}_${v4()}`;
-        const filepath = `Media_Inspirations/Kitchenz/${filename}`;
+        const filepath = `Media_Inspirations/${category}/${filename}`;
         const imageRef = ref(storage, filepath);
 
         try {
+            SetisProcessing(true);
             await uploadBytes(imageRef, imageFile);
             const imageUrl = await getDownloadURL(imageRef);
 
             if (imageUrl) {
                 const mediaCollection = collection(db, "Media_Inspirations");
-                const q = query(mediaCollection, where("category", "==", "Kitchenz"));
+                const q = query(mediaCollection, where("category", "==", category));
 
                 const snapshot = await getDocs(q);
 
                 if (snapshot.empty) {
                     await addDoc(mediaCollection, {
-                        category: "Kitchen",
-                        media: [{ category: "Kitchen", name: filename, url: imageUrl }],
+                        category: category,
+                        media: [{ category: category, name: filename, url: imageUrl }],
                     });
+                    SetisProcessing(false);
                     successMessage("Image successfully uploaded and added.");
                     window.location.reload();
                 } else {
@@ -66,14 +69,16 @@ const InspirationFileUpload = () => {
                     const existingMedia = snapshot.docs[0].data().media || [];
                     await setDoc(
                         doc(db, "Media_Inspirations", docId),
-                        { media: [...existingMedia, { category: "Kitchen", name: filename, url: imageUrl }] },
+                        { media: [...existingMedia, { category: category, name: filename, url: imageUrl }] },
                         { merge: true }
                     );
+                    SetisProcessing(false);
                     successMessage("Image successfully added to the existing collection.");
                     window.location.reload();
                 }
             }
         } catch (error: any) {
+            SetisProcessing(false);
             failureMessage(`Error uploading image: ${error.message}`);
         }
     };
@@ -88,8 +93,10 @@ const InspirationFileUpload = () => {
                 helperText="Allowed formats: JPEG, PNG, JPG"
             />
             <Button
-                onClick={uploadProfileImage}
+                onClick={uploadMediaImage}
                 size="xs"
+                isProcessing={isProcessing}
+                disabled={isProcessing}
                 className="text-nowrap"
                 theme={customsubmitTheme}
                 color="appsuccess"
