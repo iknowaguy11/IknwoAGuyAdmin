@@ -300,30 +300,28 @@ const ContractorRegistration = () => {
     const [provCategory, setprovCategory] = useState<string | null | undefined>("Select Provice");
     const [ServiceCategory, setServiceCategory] = useState<string | null | undefined>("Select Service");
 
-    const Services = [
-        { value: "PLUMBING", label: "PLUMBING" },
-        { value: "HANDYMAN", label: "HANDYMAN" },
-        { value: "ELECTRICAL", label: "ELECTRICAL" },
-        { value: "PAINTING", label: "PAINTING" },
-        { value: "CARPENTRY", label: "CARPENTRY" },
-        { value: "GARDEN AND LANDSCAPING", label: "GARDEN AND LANDSCAPING" },
-        { value: "BUILDING AND RENOVATIONS", label: "BUILDING AND RENOVATIONS" },
-        { value: "MORE CATEGORIES", label: "MORE CATEGORIES" },
-    ];
-
-    const provinces = [
-        { value: "Limpopo", label: "Limpopo" },
-        { value: "Gauteng", label: "Gauteng" },
-        { value: "Eastern Cape", label: "Eastern Cape" },
-        { value: "Free State", label: "Free State" },
-        { value: "KwaZulu Natal", label: "KwaZulu Natal" },
-        { value: "Mpumalanga", label: "Mpumalanga" },
-        { value: "North West", label: "North West" },
-        { value: "Northern Cape", label: "Northern Cape" },
-        { value: "Western Cape", label: "Western Cape" }
-
-    ];
-
+    type prv={
+        value:string,
+        label:string
+    }
+    type srv={
+        value:string,
+        label:string
+    }
+    const [provinces,Set_Provinces]=useState<prv[]>([]);
+    const [Services,Set_Services]=useState<prv[]>([]);
+    useEffect(()=>{
+        let provinces_ = ProvinceData?.map((province) => ({
+            value: province.province,
+            label: province.province,
+        }));
+        let Services_ = ServiceData?.map((province) => ({
+            value: province.ServiceType,
+            label: province.ServiceType,
+        }));
+        Set_Services(Services_);
+        Set_Provinces(provinces_);
+    },[ProvinceData || Services]);
     const SetSelectedService = (category: string | null | undefined) => {
         setServiceCategory(category);
         if (category !== "" && category !== "Select Service") {

@@ -133,7 +133,7 @@ const TempAreas = () => {
                             <div className="mb-2 block">
                                 <Label htmlFor="Town" value="Addresses*" />
                             </div>
-                            <Select id="addrSelector" className="max-w-md" theme={customselectTheme} color={"success"} required>
+                            <Select id="addrSelector" className="max-w-md" theme={customselectTheme} color={"success"}>
                                 {ProvinceData?.map((item) => (
                                     <optgroup label={item.province} key={item.Id}>
                                         {item?.Towns?.map((ars, index) => (

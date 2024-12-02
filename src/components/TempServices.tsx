@@ -131,7 +131,7 @@ const TempServices = () => {
                             <div className="mb-2 block">
                                 <Label htmlFor="Town" value="Services*" />
                             </div>
-                            <Select className="max-w-md" id="Service" theme={customselectTheme} color={"success"} required>
+                            <Select className="max-w-md" id="Service" theme={customselectTheme} color={"success"}>
                                 {ServiceData?.map((item) => (
                                     <optgroup label={item?.ServiceType} key={item?.Id}>
                                         {item?.actualTask?.map((ars, index) => (
