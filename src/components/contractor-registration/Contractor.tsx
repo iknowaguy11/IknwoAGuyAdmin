@@ -413,7 +413,7 @@ const ContractorRegistration = () => {
                                     <TextInput
                                         value={YourName}
                                         onChange={(e) => SetYourName(e.target.value)}
-                                        theme={customInputBoxTheme} color={"focuscolor"} id="cmpName" type="text" placeholder={formType ? "Your Name" : "Company Representative"} required shadow />
+                                        theme={customInputBoxTheme} color={"focuscolor"} id="urName" type="text" placeholder={formType ? "Your Name" : "Company Representative"} required shadow />
                                 </div>
                                 <div>
                                     <div className="mb-2 block">
@@ -422,7 +422,7 @@ const ContractorRegistration = () => {
                                     <TextInput
                                         value={YourSurName}
                                         onChange={(e) => SetYourSurName(e.target.value)}
-                                        theme={customInputBoxTheme} color={"focuscolor"} id="cmpName" type="text" placeholder="Your Surname" required shadow />
+                                        theme={customInputBoxTheme} color={"focuscolor"} id="cmpSur" type="text" placeholder="Your Surname" required shadow />
                                 </div>
 
                                 <div>
@@ -502,7 +502,7 @@ const ContractorRegistration = () => {
                                     <TextInput
                                         value={YourName}
                                         onChange={(e) => SetYourName(e.target.value)}
-                                        theme={customInputBoxTheme} color={"focuscolor"} id="cmpName" type="text" placeholder={formType ? "Your Name" : "Name of the person representing the company"} required shadow />
+                                        theme={customInputBoxTheme} color={"focuscolor"} id="yourName" type="text" placeholder={formType ? "Your Name" : "Name of the person representing the company"} required shadow />
                                 </div>
 
                                 <div>

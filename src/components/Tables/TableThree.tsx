@@ -87,9 +87,9 @@ const TableProjects = () => {
 
   return (
     <div className="rounded-[10px] border border-stroke bg-white p-4 shadow-1 dark:border-dark-3 dark:bg-gray-dark dark:shadow-card sm:p-7.5 mb-3">
-      <div className="px-4 py-6 md:px-6 xl:px-9 flex justify-between items-center">
+      <div className="px-4 py-6 md:px-6 xl:px-9 flex flex-wrap justify-between items-center">
         <h4 className="text-body-2xlg font-bold text-dark dark:text-white">Users</h4>
-        <div className="gap-2 flex">
+        <div className="gap-2 flex flex-wrap">
         <input
           type="text"
           placeholder="Filter by name/reg/email"

@@ -251,8 +251,8 @@ const HomeOwnerRegistration = () => {
                         </div>
 
                         <div className="flex items-center gap-2">
-                            <Checkbox checked={tncs} onChange={() => setTnCs(tncs ? false : true)} id="agree" theme={customCheckboxTheme} color="success" />
-                            <Label htmlFor="agree" className="flex">
+                            <Checkbox checked={tncs} onChange={() => setTnCs(tncs ? false : true)} id="agreed" theme={customCheckboxTheme} color="success" />
+                            <Label htmlFor="agreed" className="flex">
                                 I agree with the&nbsp;
                                 <Link href="/terms-and-conditions" target='_blank' className="text-appGreen hover:underline dark:text-appGreen">
                                     terms and conditions
