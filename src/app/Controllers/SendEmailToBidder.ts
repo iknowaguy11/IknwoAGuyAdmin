@@ -9,7 +9,7 @@ export const SendEmailToBidder=async(companyEmail:string,task:string,owner:strin
             owner:owner,
             subject:'Project Refund'
         }
-        const res=await axios.post('https://payfastpaymentvalidator.onrender.com/refundmessage',upt);
+        const res=await axios.post('https://iknowaguyapi.onrender.com/refundmessage',upt);
         if(res.status==200){
             successMessage(String(res.data.message));
         }else{

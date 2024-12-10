@@ -92,7 +92,7 @@ const HomeOwnerRegistration = () => {
     }
     const AddFirestoreData = async () => {
         try {
-            const response = await fetch('https://payfastpaymentvalidator.onrender.com/verify-recaptcha/', {
+            const response = await fetch('https://iknowaguyapi.onrender.com/verify-recaptcha/', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

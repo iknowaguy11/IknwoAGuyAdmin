@@ -7,7 +7,7 @@ export const SendEmailProjectDeleted=async(ownerEmail:string,subject:string)=>{
             ownerEmail:ownerEmail,
             subject:subject
         }
-        const res=await axios.post('https://payfastpaymentvalidator.onrender.com/projdelete',upt);
+        const res=await axios.post('https://iknowaguyapi.onrender.com/projdelete',upt);
         if(res.status==200){
             successMessage(String(res.data.message));
             window.location.reload();

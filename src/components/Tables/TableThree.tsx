@@ -10,10 +10,12 @@ import { AppContext } from "@/Context/appContext";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import { failureMessage, successMessage } from "@/app/notifications/successError";
+import ModalSpinnerDelete from "../Modal/ModalSpinnerDelete";
+import { searchProjectByKey } from "@/app/Controllers/searchProject";
 
 const TableProjects = () => {
   const router=useRouter();
-  const {SetClientKey}=useContext(AppContext);
+  const {SetClientKey,SetDeleteUser,isDeleteUser}=useContext(AppContext);
   const [selectedOption, setSelectedOption] = useState(UserActions[0]);
   const {usrData}=useFetchUsers();
   const [currentPage, setCurrentPage] = useState(1);
@@ -53,21 +55,34 @@ const TableProjects = () => {
       router.push('/profile');
     }
   }
-
-  const DeleteUser=(uid:string)=>{
-    axios.delete('https://payfastpaymentvalidator.onrender.com/deleteUser',{data:{uid},headers:{
-      'Content-Type': 'application/json'
-    }}).then(resp=>{
-      if (resp.status === 200) {
-        successMessage('User deleted successfully');
-        console.log(resp.data.message);
-      } else {
-        console.error('Failed to delete user:', resp.data.error);
-        failureMessage('Failed to delete user:'+ resp.data.error);
-      }
-    }).catch((err:any)=>{
-      failureMessage(String(err.message))
-    })
+  const DeleteUser=async(uid:string)=>{
+    //check if user is not in an projects
+    SetDeleteUser(true);
+    let found=false;
+    found=await searchProjectByKey(uid);
+    if(found==true){
+      SetDeleteUser(false);
+      failureMessage("User has been found in other projects. Review projects and refund their tokens.");
+    }else{
+      
+      axios.delete('https://iknowaguyapi.onrender.com/deleteUser',{data:{uid},headers:{
+        'Content-Type': 'application/json'
+      }}).then(resp=>{
+        if (resp.status === 200) {
+          successMessage('User deleted successfully');
+          SetDeleteUser(false);
+          console.log(resp.data.message);
+        } else {
+          SetDeleteUser(false);
+          console.error('Failed to delete user:', resp.data.error);
+          failureMessage('Failed to delete user:'+ resp.data.error);
+        }
+      }).catch((err:any)=>{
+        SetDeleteUser(false);
+        failureMessage(String(err.message))
+      })
+    }
+    
   }
 
   return (
@@ -155,6 +170,7 @@ const TableProjects = () => {
           Next
         </button>
       </div>
+      <ModalSpinnerDelete isDeleteUser={isDeleteUser}/>
     </div>
   );
 };

@@ -8,6 +8,8 @@ interface AppContextType{
     SetUkey:Dispatch<SetStateAction<string | null>>;
     Tab:string|null;
     SetTab:Dispatch<SetStateAction<string|null>>;
+    isDeleteUser:boolean;
+    SetDeleteUser:Dispatch<SetStateAction<boolean>>;
 
     //current user selected
     clientKey:string|null,
@@ -25,7 +27,8 @@ const AppContext = createContext<AppContextType>({
     clientKey:null,
     Tab:null,
     SetTab:():string|null => null,
-
+    isDeleteUser: false,
+    SetDeleteUser: (): boolean => false,
     SetClientKey: (): null => null,
     isAuthenticated:false, 
     setIsAuthenticated:(): boolean => false
@@ -36,6 +39,7 @@ const AppProvider = ({ children }: { children: any }) => {
     const [clientKey,SetClientKey]=useState<string | null>(null);
     const [isLoggedIn, setLoggedIn] = useState<boolean>(false);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [isDeleteUser, SetDeleteUser] = useState(false);
     const[Tab,SetTab]=useState<string|null>("first");
     useEffect(()=>{
         SetUkey(window?.sessionStorage?.getItem("ukey")!==undefined && window?.sessionStorage?.getItem("ukey")!==null && window?.sessionStorage?.getItem("ukey")!=="" ? window?.sessionStorage?.getItem("ukey") :null);
@@ -47,7 +51,8 @@ const AppProvider = ({ children }: { children: any }) => {
             Tab,SetTab,
             clientKey,SetClientKey,
             isLoggedIn, setLoggedIn,
-            isAuthenticated, setIsAuthenticated
+            isAuthenticated, setIsAuthenticated,
+            isDeleteUser, SetDeleteUser
         }}>
         {children}
         </AppContext.Provider>

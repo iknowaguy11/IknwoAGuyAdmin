@@ -13,8 +13,8 @@ const ECommerce: React.FC = () => {
   const {Tab}=useContext(AppContext);
     useEffect(() => {
         if (window?.sessionStorage?.getItem("ukey") == undefined || window?.sessionStorage?.getItem("ukey") == null || window?.sessionStorage?.getItem("ukey") == "") {
-            router.replace('/login');
-            window.location.href='/login';
+            router.replace('/');
+            window.location.href='/';
         }
 
     }, [router]);

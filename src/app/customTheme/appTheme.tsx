@@ -38,6 +38,18 @@ export const customsubmitTheme: CustomFlowbiteTheme['button'] = {
     }
 };
 
+export const customModal:CustomFlowbiteTheme['modal']={
+    "header": {
+    "base": "flex items-start justify-between rounded-t border-b p-5 dark:border-gray-600",
+    "popup": "border-b-0 p-2",
+    "title": "text-xl font-medium text-gray-900 dark:text-white",
+    "close": {
+      "base": "hidden ml-auto inline-flex items-center rounded-lg bg-transparent p-1.5 text-sm text-gray-400 hover:bg-gray-200 hover:text-gray-900 dark:hover:bg-gray-600 dark:hover:text-white",
+      "icon": "h-5 w-5"
+    }
+  }
+}
+
 //Checkbox  theme
 export const customCheckboxTheme: CustomFlowbiteTheme['checkbox'] = {
     root: {
