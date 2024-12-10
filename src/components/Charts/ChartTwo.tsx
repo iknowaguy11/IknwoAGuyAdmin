@@ -102,7 +102,6 @@ const ChartTwo: React.FC = () => {
           </h4>
         </div>
         <div>
-          <DefaultSelectOption options={["This Week", "Last Week"]} />
         </div>
       </div>
 

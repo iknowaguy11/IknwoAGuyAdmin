@@ -73,7 +73,6 @@ const ChartThree: React.FC = () => {
           </h4>
         </div>
         <div>
-          <DefaultSelectOption options={["Monthly", "Yearly"]} />
         </div>
       </div>
 
