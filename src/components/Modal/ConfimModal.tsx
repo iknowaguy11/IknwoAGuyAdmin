@@ -25,7 +25,7 @@ export function ConfirmModal({size,projectDelete,setprojectDelete, message, conf
                                 setconfModal(false);
                                 setprojectDelete(null);
                             }}>
-                                Yes, I&apos;m sure"
+                                Yes, I&apos;m sure
                             </Button>
                             <Button color="gray" onClick={() => setconfModal(false)}>
                                 No, cancel

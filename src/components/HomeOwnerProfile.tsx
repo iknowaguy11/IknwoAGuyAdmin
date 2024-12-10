@@ -69,16 +69,7 @@ const HomeOwnerProfile = ({UserData}:{UserData:IUser[]}) => {
                 <Card className='flex max-w-lg flex-grow rounded mt-3'>
                     <form onSubmit={(e)=>updateProfile(e,router,{YourName:FristName,YourSurName:LastName,phone:(validator.isMobilePhone(phone?.trim()) ? phone  : UserData[0]?.phone)},UserData[0]?.Id,Imageupload,SetIsprocessing)} className="flex max-w-lg flex-col gap-4 flex-grow">
                         <div className="mb-2 block">
-                            {/* {
-                                UserData[0]?.profileImage &&
-                                <Image
-                                src={UserData[0]?.profileImage}
-                                alt="Picture of the author"
-                                className="mr-3 w-auto sm:h-9"
-                                width={170}
-                                height={40}  
-                            />
-                            } */}
+                            
                             <div>
                                 <input
                                     type="file"
@@ -139,7 +130,7 @@ const HomeOwnerProfile = ({UserData}:{UserData:IUser[]}) => {
             </div>
                     <form className="flex max-w-lg flex-col gap-4 flex-grow">
                         
-                        <h3 className="text-lg font-bold underline">Homeowner's Projects</h3>
+                        <h3 className="text-lg font-bold underline">Homeowner&apos;s Projects</h3>
                         
                         {
                             UserProjects?.map((item) => (
