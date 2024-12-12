@@ -7,7 +7,6 @@ import { Metadata } from "next";
 import Login from "@/components/Login";
 import { AppContext } from "@/Context/appContext";
 
-
 export default function Home() {
   const { isAuthenticated, setIsAuthenticated } = useContext(AppContext);
   useEffect(() => {
@@ -16,7 +15,7 @@ export default function Home() {
   }, []);
 
   return (
-    <>
+    <div>
       {isAuthenticated ? (
         <DefaultLayout>
           <ECommerce />
@@ -24,6 +23,6 @@ export default function Home() {
       ) : (
         <Login />
       )}
-    </>
+    </div>
   );
 }
